@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto&display=swap');
+
+
+:root {
+  --bleu-fonce: #023047;
+  --bleu-ciel: #a2d2ff;
+  --gris-fonce: #adb5bd;
+  --gris-ciel: #e9ecef;
+  --rouge: #ff595e;
+  --verte: #9ef01a;
+  --ombrage: 0px 0px 11px -4px rgba(66, 68, 90, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
