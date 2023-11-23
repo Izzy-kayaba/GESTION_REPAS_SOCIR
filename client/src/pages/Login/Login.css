@@ -1,8 +1,8 @@
-main {
-    width: 100%;
-    height: 100vh;
-    /* mulayi ya ecran*/
-    background-color: var(--bleu-ciel);
+.cover {
+    background-image: url(../../../public/assets/bg-1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 h1,
@@ -12,7 +12,6 @@ h4 {
 }
 
 .carte_parent {
-    background-color: var(--bleu-fonce);
     height: 100vh;
     display: flex;
     align-items: center;

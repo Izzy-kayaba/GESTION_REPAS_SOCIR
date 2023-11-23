@@ -1,0 +1,22 @@
+.profile {
+    display: flex;
+    justify-content: end;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #003049;
+}
+
+.profile-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.image-profile {
+    border-radius: 50%;
+    display: inline;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #003049;
+}
+
+

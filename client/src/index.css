@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto&display=swap');
 
-
 :root {
   --bleu-fonce: #023047;
   --bleu-ciel: #a2d2ff;
@@ -16,4 +15,22 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+.card {
+  box-shadow: -3px 0px 12px -3px rgba(9, 3, 71, 0.39);
+}
+
+.card:hover {
+  box-shadow: -3px 0px 12px 1px rgba(9, 4, 65, 0.39);
+}
+
+.admin_routes {
+  background: #f1efef;
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  /* ndenge il faut elakisa biloko ya kati*/
+  grid-template-columns: 280px auto;
+  /* positioner elements enfants*/
 }
