@@ -3,7 +3,6 @@ import {
     Route,
     Routes,
     Navigate,
-    Outlet,
 } from 'react-router-dom';
 
 // Components for different pages
