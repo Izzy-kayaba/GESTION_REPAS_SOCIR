@@ -13,22 +13,22 @@ const Sidebar: React.FC = () => {
                 <NavLink className={customClassName} to="/admin">
                     TABLEAU DE BORD
                 </NavLink>
-                <NavLink className={customClassName} to="/daily-meal">
+                <NavLink className={customClassName} to="/admin/repas-du-jour">
                     Repas du jour
                 </NavLink>
                 <NavLink className={customClassName} to="/admin/agents">
                     Agents
                 </NavLink>
-                <NavLink className={customClassName} to="/admin/meals">
+                <NavLink className={customClassName} to="/admin/repas">
                     Repas
                 </NavLink>
-                <NavLink className={customClassName} to="/admin/entities">
+                <NavLink className={customClassName} to="/admin/entites">
                     Entites
                 </NavLink>
                 <NavLink className={customClassName} to="/admin/departments">
                     Departements
                 </NavLink>
-                <NavLink className={customClassName} to="/admin/settings">
+                <NavLink className={customClassName} to="/admin/parametres">
                     Parametres
                 </NavLink>
             </ul>

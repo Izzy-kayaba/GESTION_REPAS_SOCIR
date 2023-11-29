@@ -34,3 +34,66 @@
   grid-template-columns: 280px auto;
   /* positioner elements enfants*/
 }
+
+.text-bleu-fonce {
+  color: var(--bleu-fonce, #023047);
+}
+
+.text-bleu-ciel {
+  color: var(--bleu-ciel, #a2d2ff);
+}
+
+.text-gris-fonce {
+  color: var(--gris-fonce, #adb5bd);
+}
+
+.text-gris-ciel {
+  color: var(--gris-ciel, #e9ecef);
+}
+
+.text-rouge {
+  color: var(--rouge, #ff595e);
+}
+
+.text-verte {
+  color: var(--verte, #9ef01a);
+}
+
+.bg-bleu-fonce {
+  background-color: var(--bleu-fonce, #023047);
+  color: #fff; /* opposite text color */
+}
+
+.bg-bleu-ciel {
+  background-color: var(--bleu-ciel, #a2d2ff);
+  color: #000; /* opposite text color */
+}
+
+.bg-gris-fonce {
+  background-color: var(--gris-fonce, #adb5bd);
+  color: #fff; /* opposite text color */
+}
+
+.bg-gris-ciel {
+  background-color: var(--gris-ciel, #e9ecef);
+  color: #000; /* opposite text color */
+}
+
+.bg-rouge {
+  background-color: var(--rouge, #ff595e);
+  color: #fff; /* opposite text color */
+}
+
+.bg-verte {
+  background-color: var(--verte, #9ef01a);
+  color: #000; /* opposite text color */
+}
+
+.waring-message{
+  width: 300px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+

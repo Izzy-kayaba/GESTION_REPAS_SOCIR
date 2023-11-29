@@ -10,14 +10,19 @@ import AdminUserDetails from '../pages/AdminUserDetails/AdminUserDetails';
 const AdminRoutes = () => {
     return (
             <div className="admin_routes">
-                <Sidebar />
+                <Sidebar /> 
                 <Routes>
                     <Route path="/" element={<AdminDashboard />} />
+                    <Route path="repas-du-jour" element={<AdminAgentDetails />} />
                     <Route path="agents" element={<AdminAgents />} />
                     <Route path="agents/:id" element={<AdminAgentDetails />} />
+                    <Route path="repas" element={<AdminAgentDetails />} />
+                    <Route path="entites" element={<AdminAgentDetails />} />
+                    <Route path="departements" element={<AdminAgentDetails />} />
+                    <Route path="parametres" element={<AdminAgentDetails />} />
                     <Route path="users" element={<AdminUsers />} />
                     <Route path="users/:id" element={<AdminUserDetails />} />
-                    <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="*" element={<Navigate to="/admin" />} />
                 </Routes>
             </div>
     )

@@ -2,15 +2,16 @@ nav {
     display: block;
     background: #003049;
     color: white;
-    padding-block: 2rem;
+    padding-block: 1rem;
 }
 
 .titre-menu {
     margin-bottom: 3rem;
     padding-inline: 2rem;
-}
+} 
 
 ul {
+    padding: 0;
     list-style: none;
     color: #caf0f8;
 }
@@ -29,11 +30,11 @@ ul {
     cursor: pointer;
     background-color: #caf0f8;
     color: #003049;
-    padding-left: 2.5rem;
+    padding-left: 3rem;
 }
 
 .active {
     background-color: #caf0f8;
     color: #003049;
-
+    padding-left: 2.5rem;
 }
