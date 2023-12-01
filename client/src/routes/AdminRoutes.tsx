@@ -32,5 +32,4 @@ const AdminRoutes = () => {
         </div>
     )
 }
-
 export default AdminRoutes;
