@@ -43,7 +43,7 @@ const AdminAgents: React.FC = () => {
     const fetchData = async () => {
       try {
         // Requête pour récupérer les données depuis le serveur
-        const response = await fetch('http://localhost:1100/api/agents');
+        const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/api/agents`);
         // Conversion de la réponse en format JSON
         const data = await response.json();
         // Mise à jour des états avec les données récupérées
