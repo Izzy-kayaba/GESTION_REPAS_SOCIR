@@ -7,7 +7,7 @@ const Sidebar: React.FC = () => {
         isActive ? 'link_nav active' : 'link_nav';
 
     return (
-        <nav>
+        <nav id="sidebar">
             <h2 className="titre-menu">Administration</h2>
             <ul>
                 <NavLink className={customClassName} to="/admin">

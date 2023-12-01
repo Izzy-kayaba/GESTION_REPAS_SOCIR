@@ -1,37 +1,22 @@
 import React from 'react'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 function Topbar() {
+
   return (
-    <div>
-      <a className="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-        Link with href
-      </a>
-      <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-        Button with data-bs-target
-      </button>
-      <div className="offcanvas offcanvas-start" tabIndex={-1} id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-          <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div className="offcanvas-body">
-          <div>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-          </div>
-          <div className="dropdown mt-3">
-            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-              Dropdown button
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+    <Navbar id="topbar" bg="bg-bleu-fonce" expand="sm" className="px-2 text-white">
+      <Navbar.Brand href="#home">Your Logo</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+        <Nav className="m-auto">
+          <Nav.Link href="#home">Home</Nav.Link>
+          <Nav.Link href="#about">About</Nav.Link>
+          <Nav.Link href="#services">Services</Nav.Link>
+          <Nav.Link href="#contact">Contact</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  );
 }
 
 export default Topbar

@@ -35,6 +35,10 @@
   /* positioner elements enfants*/
 }
 
+#topbar {
+  display: none;
+}
+
 .text-bleu-fonce {
   color: var(--bleu-fonce, #023047);
 }
@@ -61,35 +65,41 @@
 
 .bg-bleu-fonce {
   background-color: var(--bleu-fonce, #023047);
-  color: #fff; /* opposite text color */
+  color: #fff;
+  /* opposite text color */
 }
 
 .bg-bleu-ciel {
   background-color: var(--bleu-ciel, #a2d2ff);
-  color: #000; /* opposite text color */
+  color: #000;
+  /* opposite text color */
 }
 
 .bg-gris-fonce {
   background-color: var(--gris-fonce, #adb5bd);
-  color: #fff; /* opposite text color */
+  color: #fff;
+  /* opposite text color */
 }
 
 .bg-gris-ciel {
   background-color: var(--gris-ciel, #e9ecef);
-  color: #000; /* opposite text color */
+  color: #000;
+  /* opposite text color */
 }
 
 .bg-rouge {
   background-color: var(--rouge, #ff595e);
-  color: #fff; /* opposite text color */
+  color: #fff;
+  /* opposite text color */
 }
 
 .bg-verte {
   background-color: var(--verte, #9ef01a);
-  color: #000; /* opposite text color */
+  color: #000;
+  /* opposite text color */
 }
 
-.waring-message{
+.waring-message {
   width: 300px;
   text-align: center;
   padding: 20px;
@@ -97,3 +107,25 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+
+@media screen and (max-width: 1080px) {
+
+  #sidebar {
+    display: none;
+  }
+
+  #topbar {
+    display: block;
+    width: 100%;
+  }
+
+
+
+  .admin_routes {
+    background: #f1efef;
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: auto;
+  }
+}

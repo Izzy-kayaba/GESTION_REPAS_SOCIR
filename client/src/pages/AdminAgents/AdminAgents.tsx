@@ -103,7 +103,7 @@ const AdminAgents: React.FC = () => {
 
   // Rendu du composant
   return (
-    <div className="p-3">
+    <div className="p-2">
       {/* Button to open the modal */}
       <Button variant="primary" onClick={() => setShowModal(true)}>
         Ajouter un agent
