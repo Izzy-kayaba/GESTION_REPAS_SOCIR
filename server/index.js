@@ -84,6 +84,21 @@ app.post('/api/agents', async (req, res) => {
   }
 });
 
+
+// Route to fetch data from the 'agents' table
+app.get('/api/repas-agents', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM repas_agents');
+    const agents = result.rows;
+    res.json(agents);
+    client.release();
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
