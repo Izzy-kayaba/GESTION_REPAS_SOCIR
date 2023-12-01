@@ -8,38 +8,28 @@ function AdminRepas() {
     let fileteredData = []
 
     useEffect(() => {
-
         const fetchData = async () => {
             try {
                 const response = await fetch("http://localhost:1100/api/repas-agents");
-                const res = await response.json()
-                setData(res)
-
+    
+                // The fetch function doesn't throw an error for HTTP error status codes so check the ok property
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                setData(data);
             } catch (error) {
-                console.log(error)
-
+                console.error("Error fetching data:", error);
             }
-        }
+        };
+    
         fetchData();
-
-        fileteredData = data?.filter((date: any) => {
-            return date.date_cree < moment(today).format()
-         })
-         console.log("fileteredData", fileteredData)
-
-    }, [])
+    }, []);
+    
 
 
     return (
         <div className="p-2">
-
-            <ul> {data.map((item: any) => (
-                <>
-                    <li className='text-dark'> {item.id_agent} - {moment(new Date(item.date_cree)).calendar()}</li>
-                </>
-            ))}
-            </ul>
-
         </div>
     )
 }
