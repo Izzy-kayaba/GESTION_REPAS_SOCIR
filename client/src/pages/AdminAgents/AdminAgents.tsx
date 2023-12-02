@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Form, FormControl, Button } from 'react-bootstrap';
 import ModalTemplate from '../../elements/Modal/Modal';
 import Loader from '../../elements/Loader/Loader';
+import useFetch from '../../hooks/useFetch';
 
 type Agent = {
   id_agent?: number;
@@ -16,7 +17,7 @@ type Agent = {
   lieu_naiss: string;
   date_naiss: string;
 }
- 
+
 const AdminAgents: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
@@ -25,39 +26,24 @@ const AdminAgents: React.FC = () => {
   const handleAddAgent = (formData: Agent) => {
     // Perform any additional logic, validation, or API calls here
     // For now, just update the state with the new agent data
-    setAgents((prevAgents) => [...prevAgents, formData]);
+    agents = { ...formData };
   };
 
 
-  // State hooks pour stocker les données
-  const [agents, setAgents] = useState<Agent[]>([]); // Liste complète des agents
+  // State hooks to store the data
+  let agents: any = useFetch({ endpoint: "api/agents" });
   const [sortedAgents, setSortedAgents] = useState<Agent[]>([]); // Liste triée des agents
   const [searchTerm, setSearchTerm] = useState<string>(''); // Terme de recherche
   const [currentPage, setCurrentPage] = useState<number>(1); // Numéro de page actuelle
 
+  useEffect(() => {
+    if (agents && agents.data) {
+      setSortedAgents(agents.data);
+    }
+  }, [agents]);
+
   const agentsPerPage = 3; // Nombre d'agents à afficher par page
   const totalPages = Math.ceil(sortedAgents.length / agentsPerPage); // Calcul du nombre total de pages
-
-  // Effet pour récupérer les données lorsque le composant est monté
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Requête pour récupérer les données depuis le serveur
-        const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/api/agents`);
-        // Conversion de la réponse en format JSON
-        const data = await response.json();
-        // Mise à jour des états avec les données récupérées
-        setAgents(data);
-        setSortedAgents(data); // L'affichage initial n'est pas trié
-      } catch (error) {
-        // Gestion des erreurs lors de la récupération des données
-        console.error('Erreur lors de la récupération des données :', error);
-      }
-    };
-
-    // Appel de la fonction pour récupérer les données
-    fetchData();
-  }, []); // Le tableau vide indique que cet effet ne dépend d'aucune variable, donc il s'exécute une fois
 
   // Fonction pour gérer le tri des agents en fonction d'un champ
   const handleSort = (field: keyof Agent) => {
@@ -137,8 +123,8 @@ const AdminAgents: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          { displayedAgents.length < 1 ? 
-          <Loader></Loader> : 
+          {displayedAgents.length < 1 ?
+            <Loader></Loader> :
             displayedAgents.map((agent) => (
               <tr key={agent.id_agent}>
                 <td>{agent.matr_agent}</td>

@@ -1,32 +1,20 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react';
+import useFetch from '../../hooks/useFetch';
+
 
 function AdminRepas() {
 
-    const [data, setData] = useState<any>([]);
-    const today = new Date();
-    let fileteredData = []
+    const agents: any = useFetch({ endpoint: "api/agents" });
+    const repasAgents: any = useFetch({ endpoint: "api/repas-agents" });
+    const aliments: any = useFetch({ endpoint: "api/aliments" });
+    const condiments: any = useFetch({ endpoint: "api/condiments" });
+    const accompagnements: any = useFetch({ endpoint: "api/accompagnements" });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("http://localhost:1100/api/repas-agents");
-    
-                // The fetch function doesn't throw an error for HTTP error status codes so check the ok property
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                setData(data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-    
-        fetchData();
-    }, []);
-    
-
+    console.log("agents", agents.data);
+    console.log("repasAgents", repasAgents.data);
+    console.log("aliments", aliments.data);
+    console.log("condiments", condiments.data);
 
     return (
         <div className="p-2">

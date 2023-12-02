@@ -16,7 +16,7 @@ const Header: React.FC = () => {
                 <Nav.Link href="#home">
                     <img src="https://via.placeholder.com/40x40" className="rounded-circle" />
                 </Nav.Link>
-                <NavDropdown title="Plus" id="basic-nav-dropdown">
+                <NavDropdown title="" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
