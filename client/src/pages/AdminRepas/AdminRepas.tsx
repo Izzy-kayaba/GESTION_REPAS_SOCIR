@@ -3,6 +3,7 @@ import 'moment/locale/fr'; // Import French locale
 import React, { useEffect, useState } from 'react';
 import { Table, Form, FormControl, Button } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
+import CustomTable from '../../elements/Table/Table';
 
 
 function RepasAgentsTable() {  // Fetch data from the repas_agents table
@@ -23,11 +24,17 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
     const [displayData, setDisplayData] = useState<any[]>([]);
     // Filter data where 'date_cree' is equal to today
     const filteredData = displayData.filter((row) => moment(row.date_cree).format('Do MMMM YYYY') === todayFormatted);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [startDate, setStartDate] = useState<string>('');
-    const [endDate, setEndDate] = useState<string>('');
 
-
+    const tableColumns = [
+        { title: 'ID', dataKey: 'id_repas_agent' },
+        { title: 'Agent', dataKey: 'nom_agent' },
+        { title: 'Condiment', dataKey: 'nom_condiment' },
+        { title: 'Accompagnement', dataKey: 'nom_accompagnement' },
+        { title: 'Aliment', dataKey: 'nom_aliment' },
+        { title: 'Prix', dataKey: 'prix' },
+        { title: 'Date Créé', dataKey: 'date_cree' },
+        { title: 'Commentaires', dataKey: 'commentaires' },
+      ];
 
     useEffect(() => {
         // Combine data from repas_agents with related tables
@@ -56,34 +63,7 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
 
     return (
         <div>
-            <Table striped bordered hover variant="dark">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Agent</th>
-                        <th>Condiment</th>
-                        <th>Accompagnement</th>
-                        <th>Aliment</th>
-                        <th>Prix</th>
-                        <th>Date Créé</th>
-                        <th>Commentaires</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredData.map((row) => (
-                        <tr key={row.id_repas_agent}>
-                            <td>{row.id_repas_agent}</td>
-                            <td>{row.nom_agent}</td>
-                            <td>{row.nom_condiment}</td>
-                            <td>{row.nom_accompagnement}</td>
-                            <td>{row.nom_aliment}</td>
-                            <td>{row.prix}</td>
-                            <td>{moment(row.date_cree).format('Do MMMM YYYY')}</td>
-                            <td>{row.commentaires}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10}/>
         </div>
     );
 };

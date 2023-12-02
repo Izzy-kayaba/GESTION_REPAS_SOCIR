@@ -3,6 +3,7 @@ import { Table, Form, FormControl, Button } from 'react-bootstrap';
 import ModalTemplate from '../../elements/Modal/Modal';
 import Loader from '../../elements/Loader/Loader';
 import useFetch from '../../hooks/useFetch';
+import CustomTable from '../../elements/Table/Table';
 
 type Agent = {
   id_agent?: number;
@@ -29,12 +30,20 @@ const AdminAgents: React.FC = () => {
     agents = { ...formData };
   };
 
+  const tableColumns = [
+    { title: 'ID', dataKey: 'matr_agent' },
+    { title: 'Nom', dataKey: 'nom_agent' },
+    { title: 'Prenom', dataKey: 'prenom_agent' },
+    { title: 'Sexe', dataKey: 'sexe' },
+    { title: 'Date de Naissance', dataKey: 'date_naiss' },
+    { title: 'Tel', dataKey: 'contact' },
+    { title: 'Email', dataKey: 'email_agent' },
+  ];
 
   // State hooks to store the data
   let agents: any = useFetch({ endpoint: "api/agents" });
   const [sortedAgents, setSortedAgents] = useState<Agent[]>([]); // Liste triée des agents
   const [searchTerm, setSearchTerm] = useState<string>(''); // Terme de recherche
-  const [currentPage, setCurrentPage] = useState<number>(1); // Numéro de page actuelle
 
   useEffect(() => {
     if (agents && agents.data) {
@@ -42,21 +51,6 @@ const AdminAgents: React.FC = () => {
     }
   }, [agents]);
 
-  const agentsPerPage = 3; // Nombre d'agents à afficher par page
-  const totalPages = Math.ceil(sortedAgents.length / agentsPerPage); // Calcul du nombre total de pages
-
-  // Fonction pour gérer le tri des agents en fonction d'un champ
-  const handleSort = (field: keyof Agent) => {
-    // Copie triée de la liste complète des agents
-    const sorted = [...agents].sort((a, b) => {
-      const aValue = a[field] ?? ''; // Use an empty string as a default value
-      const bValue = b[field] ?? '';
-
-      return aValue > bValue ? 1 : -1;
-    });
-
-    setSortedAgents(sorted);
-  };
 
   // Fonction pour gérer la recherche
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,28 +58,11 @@ const AdminAgents: React.FC = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Fonctions pour gérer la navigation entre les pages
-  const handlePreviousPage = () => {
-    // Décrémentation de la page actuelle, mais pas en dessous de 1
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
-  const handleNextPage = () => {
-    // Incrémentation de la page actuelle, mais pas au-dessus du nombre total de pages
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
-
-  // Calcul des indices de début et de fin pour afficher les agents sur la page actuelle
-  const startIdx = (currentPage - 1) * agentsPerPage;
-  const endIdx = startIdx + agentsPerPage;
-
   // Filtrage des agents en fonction du terme de recherche
   const filteredAgents = sortedAgents.filter((agent) =>
     agent.nom_agent.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Sélection des agents à afficher sur la page actuelle
-  const displayedAgents = filteredAgents.slice(startIdx, endIdx);
 
   // Rendu du composant
   return (
@@ -111,45 +88,8 @@ const AdminAgents: React.FC = () => {
         />
       </Form>
 
-      {/* Tableau Bootstrap pour afficher les agents */}
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            {/* En-têtes de colonnes avec la possibilité de trier */}
-            <th>Matricule</th>
-            <th onClick={() => handleSort('nom_agent')}>Nom Agent</th>
-            <th>Prénom</th>
-            <th>Sexe</th>
-          </tr>
-        </thead>
-        <tbody>
-          {displayedAgents.length < 1 ?
-            <Loader></Loader> :
-            displayedAgents.map((agent) => (
-              <tr key={agent.id_agent}>
-                <td>{agent.matr_agent}</td>
-                <td>{agent.nom_agent}</td>
-                <td>{agent.prenom_agent}</td>
-                <td>{agent.sexe}</td>
-              </tr>
-            ))}
-          {/* Affichage des lignes d'agents */}
-        </tbody>
-      </Table>
+      <CustomTable columns={tableColumns} data={filteredAgents} rowsPerPage={5} />
 
-      {/* Navigation entre les pages */}
-      <div className="d-flex justify-content-between align-items-center">
-        {/* Bouton pour passer à la page précédente, désactivé s'il n'y a pas de page précédente */}
-        <Button onClick={handlePreviousPage} disabled={currentPage === 1} variant="secondary">
-          Précédent
-        </Button>
-        {/* Affichage du numéro de page actuelle et du nombre total de pages */}
-        <span>{`Page ${currentPage} sur ${totalPages}`}</span>
-        {/* Bouton pour passer à la page suivante, désactivé s'il n'y a pas de page suivante */}
-        <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Suivant
-        </Button>
-      </div>
     </div>
   );
 };
