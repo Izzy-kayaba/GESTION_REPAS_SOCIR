@@ -60,18 +60,18 @@ CREATE TABLE utilisateurs (
 CREATE TABLE repas_agents (
     id_repas_agent SERIAL PRIMARY KEY,
     id_agent INT NOT NULL,
-    nom_agent INT NOT NULL,
+    nom_agent VARCHAR(255) NOT NULL, -- Assuming the name is a string
     id_condiment INT NOT NULL,
     id_accompagnement INT NOT NULL,
     id_aliments INT NOT NULL,
     prix numeric NOT NULL,
-    date_cree DATETIME, 
-    date_efface DATETIME,
+    date_cree TIMESTAMP, -- Assuming you want a timestamp, not DATETIME
+    date_efface TIMESTAMP,
     commentaires TEXT,
-    id_agent REFERENCES agents(id_agent),
-    id_condiment REFERENCES condiments(id_condiment),
-    id_accompagnement REFERENCES accompagnements(id_accompagnement),
-    id_aliment REFERENCES aliments(id_aliment)
+    FOREIGN KEY (id_agent) REFERENCES agents(id_agent),
+    FOREIGN KEY (id_condiment) REFERENCES condiments(id_condiment),
+    FOREIGN KEY (id_accompagnement) REFERENCES accompagnements(id_accompagnement),
+    FOREIGN KEY (id_aliments) REFERENCES aliments(id_aliment)
 );
 
 

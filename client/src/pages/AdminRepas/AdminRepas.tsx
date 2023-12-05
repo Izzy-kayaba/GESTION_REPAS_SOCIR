@@ -26,7 +26,7 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
     const filteredData = displayData.filter((row) => moment(row.date_cree).format('Do MMMM YYYY') === todayFormatted);
 
     const tableColumns = [
-        { title: 'ID', dataKey: 'id_repas_agent' },
+        { title: 'ID', dataKey: 'matr_agent' },
         { title: 'Agent', dataKey: 'nom_agent' },
         { title: 'Condiment', dataKey: 'nom_condiment' },
         { title: 'Accompagnement', dataKey: 'nom_accompagnement' },
@@ -34,13 +34,14 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
         { title: 'Prix', dataKey: 'prix' },
         { title: 'Date Créé', dataKey: 'date_cree' },
         { title: 'Commentaires', dataKey: 'commentaires' },
-      ];
+    ];
 
     useEffect(() => {
         // Combine data from repas_agents with related tables
         if (repasAgents && agents && condiments && accompagnements && aliments) {
             const processedData = repasAgents.map((repasAgent: any) => ({
                 ...repasAgent,
+                matr_agent: agents.find((agent: any) => agent.id_agent === repasAgent.id_agent)?.matr_agent,
                 nom_agent: agents.find((agent: any) => agent.id_agent === repasAgent.id_agent)?.nom_agent,
                 nom_condiment: condiments.find((condiment: any) => condiment.id_condiment === repasAgent.id_condiment)?.nom_condiment,
                 nom_accompagnement: accompagnements.find((acc: any) => acc.id_accompagnement === repasAgent.id_accompagnement)?.nom_accompagnement,
@@ -63,7 +64,7 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
 
     return (
         <div>
-            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10}/>
+            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10} />
         </div>
     );
 };

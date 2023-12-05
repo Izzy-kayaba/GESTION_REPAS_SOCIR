@@ -5,6 +5,7 @@ const { pool } = require("./config/dbConfig");
 const app = express();
 const port = 1100;
 const cors = require('cors');
+const userRoutes = require("./routes/Users")
 const agentRoutes = require("./routes/Agents")
 const alimentRoutes = require("./routes/Aliments")
 const condimentRoutes = require("./routes/Condiments")
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
   res.send('Hello, welcome to your Node.js app!');
 });
 
+app.use("/api/users", userRoutes);
 app.use("/api/agents", agentRoutes);
 app.use("/api/aliments", alimentRoutes);
 app.use("/api/condiments", condimentRoutes);

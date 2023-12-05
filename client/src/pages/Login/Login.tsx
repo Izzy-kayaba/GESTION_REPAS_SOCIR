@@ -1,7 +1,15 @@
 import React from 'react';
-import "./Login.css"
+import "./Login.css";
+import { useUserContext } from '../../Helpers/UserContext';
+
 
 function Login() {
+
+const userDetails = useUserContext();
+
+console.log(useUserContext().setUserProfile)
+
+
 
     return (
         <div className="cover">
