@@ -6,7 +6,7 @@ type Props = {
     fetchedData?: any;
 }
 
-const useFetch: React.FC<Props> = ({ endpoint, fetchedData }: Props) => {
+const useFetch: React.FC<Props> = ({ endpoint }: Props) => {
     const [state, dispatch] = useReducer(dataReducer, INITIAL_STATE);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const useFetch: React.FC<Props> = ({ endpoint, fetchedData }: Props) => {
         };
 
         fetchData();
-    }, [endpoint]); // Added dependency on endpoint to re-fetch when it changes
+    }, [endpoint, state]); // Added dependency on endpoint to re-fetch when it changes
 
     return state; // Return the state for the component using this hook
 };

@@ -90,6 +90,7 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                     console.log('Agent added successfully!');
                     onSubmit(formData);
                     onHide();
+                    
                 } else {
                     // Handle error responses from the server
                     console.error('Failed to add agent:', response.statusText);
