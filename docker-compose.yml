@@ -1,0 +1,14 @@
+version: '3'
+services:
+  server:
+    build: ./server
+    ports:
+    - 1100:3010
+  frontend: 
+    build: ./client
+    ports:
+    - 1100:3010
+    environment:
+      - server=server
+    db:
+      image: postgres

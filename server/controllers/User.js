@@ -1,5 +1,29 @@
 const { pool } = require("../config/dbConfig");
 
+
+
+const postUsers = async (req, res) => {
+    let date = new Date();
+    let { name, surname, email, password, confirmedPassword } = req.body;
+
+    try {
+        if(!name || !surname || !email || !password || !confirmedPassword ) {
+            res.status(400).json({ error : { message : "All fields are required"}});
+            return;
+        }
+
+    
+        
+    } catch (error) {
+        
+    }
+
+
+
+
+
+}
+
 // Route to fetch data from the 'agents' table
 const getUsers = async (req, res) => {
     pool.connect()
@@ -22,5 +46,6 @@ const getUsers = async (req, res) => {
 };
 
 module.exports = {
-    getUsers
+    getUsers,
+    postUsers
 }

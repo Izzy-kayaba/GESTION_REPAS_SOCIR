@@ -28,7 +28,7 @@ const useFetch: React.FC<Props> = ({ endpoint }: Props) => {
         };
 
         fetchData();
-    }, [endpoint, state]); // Added dependency on endpoint to re-fetch when it changes
+    }, [endpoint]); // Added dependency on endpoint to re-fetch when it changes
 
     return state; // Return the state for the component using this hook
 };

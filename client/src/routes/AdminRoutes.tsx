@@ -11,6 +11,7 @@ import AdminUsers from '../pages/AdminUsers/AdminUsers';
 import AdminUserDetails from '../pages/AdminUserDetails/AdminUserDetails';
 import Main from '../elements/Main/Main';
 import AdminRepas from '../pages/AdminRepas/AdminRepas';
+import Registration from '../pages/Registration/Registration';
 
 const AdminRoutes = () => {
     return (
@@ -26,7 +27,7 @@ const AdminRoutes = () => {
                         <Route key="repas" path="repas" element={<AdminRepas />} />,
                         <Route key="entites" path="entites" element={<AdminEntites />} />,
                         <Route key="departements" path="departements" element={<AdminDepartements />} />,
-                        <Route key="parametres" path="parametres" element={<AdminParametres />} />,
+                        <Route key="parametres/*" path="parametres" element={<AdminParametres />} />,
                         <Route key="users" path="users" element={<AdminUsers />} />,
                         <Route key="user-details" path="users/:id" element={<AdminUserDetails />} />,
                         <Route key="not-found" path="*" element={<Navigate to="/admin" />} />,

@@ -21,7 +21,6 @@ const Routing: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/registration" element={<Registration />} />
                 <Route path="/admin/*" element={<AdminRoutes />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>

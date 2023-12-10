@@ -1,6 +1,12 @@
 const { pool } = require("../config/dbConfig");
 
 // Route to fetch data from the 'agents' table
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getAliments = async (req, res) => {
     pool.connect()
         .then(client => {

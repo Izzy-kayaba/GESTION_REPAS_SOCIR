@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Login.css";
 import { useUserContext } from '../../Helpers/UserContext';
+import { NavLink } from 'react-router-dom';
 
 
 function Login() {
@@ -8,8 +9,6 @@ function Login() {
 const userDetails = useUserContext();
 
 console.log(useUserContext().setUserProfile)
-
-
 
     return (
         <div className="cover">

@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./Sidebar.css"
+import { Button, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropup } from "react-icons/io";
 
 const Sidebar: React.FC = () => {
     const customClassName = ({ isActive }: { isActive: boolean }) =>
         isActive ? 'link_nav active' : 'link_nav';
+
+    const [arrow, setArrow] = useState<string>("IoMdArrowDropdown");
+    const [showParams, setShowParams] = useState<Boolean>(false);
+    const handleDrowpDown = () => {
+        setShowParams(!showParams);
+    }
 
     return (
         <nav id="sidebar">
@@ -28,9 +37,32 @@ const Sidebar: React.FC = () => {
                 <NavLink className={customClassName} to="/admin/departments">
                     Departements
                 </NavLink>
-                <NavLink className={customClassName} to="/admin/parametres">
-                    Parametres
-                </NavLink>
+
+                <a onClick={handleDrowpDown} className="btn-param" >
+                    Parametres {showParams ? <IoMdArrowDropdown /> : <IoMdArrowDropup />}
+                </a>
+
+                {
+                    showParams ? <>
+                        <NavLink className={customClassName} to="/admin/parametres">
+                            Parametres 1
+                        </NavLink>
+
+                        <NavLink className={customClassName} to="/admin/parametres">
+                            Parametres 2
+                        </NavLink>
+
+                        <NavLink className={customClassName} to="/admin/parametres">
+                            Parametres 1
+                        </NavLink>
+                        <NavLink className={customClassName} to="/admin/parametres">
+                            Parametres 2
+                        </NavLink>
+                    </> : null
+                }
+
+
+
             </ul>
         </nav >
     );
