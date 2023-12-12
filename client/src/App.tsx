@@ -1,9 +1,12 @@
 import './App.css';
+import { UserProvider } from './Helpers/UserContext';
 import Routing from './routes/Routing';
 
 function App() {
   return (
-    <Routing />
+    <UserProvider>
+      <Routing />
+    </UserProvider>
   );
 }
 

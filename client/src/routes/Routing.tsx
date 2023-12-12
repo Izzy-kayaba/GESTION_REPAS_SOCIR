@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Route,
     Routes,
@@ -7,24 +7,22 @@ import {
 
 // Components for different pages
 import Login from '../pages/Login/Login';
-import Registration from '../pages/Registration/Registration';
 import NotFound from '../pages/NotFound/NotFound';
 import AdminRoutes from '../routes/AdminRoutes'
-import { UserProvider } from '../Helpers/UserContext';
+import { useUserContext } from '../Helpers/UserContext';
 
 const Routing: React.FC = () => {
 
-    const [userProfile, setuserProfile] = useState(null);
+    const { userProfile } = useUserContext();
+    const isUserLoggedIn = userProfile !== undefined;
 
     return (
-        <UserProvider>
-            <Routes>
-                <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/admin/*" element={<AdminRoutes />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </UserProvider>
+        <Routes>
+            <Route path="/" element={isUserLoggedIn ? <Navigate to="/admin/dashboard" /> : <Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin/*" element={isUserLoggedIn ? <AdminRoutes /> : <Navigate to="/login" />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
     );
 };
 

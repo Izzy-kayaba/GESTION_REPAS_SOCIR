@@ -26,7 +26,12 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [userProfile, setUserProfile] = useState<any | null>(null);
+
+  // Load user details from session storage
+  const storedUserDetails = sessionStorage.getItem('userDetails');
+  const initialUserDetails = storedUserDetails ? JSON.parse(storedUserDetails) : undefined;
+
+  const [userProfile, setUserProfile] = useState<any | undefined>(initialUserDetails);
 
   return (
     <UserContext.Provider value={{ userProfile, setUserProfile }}>

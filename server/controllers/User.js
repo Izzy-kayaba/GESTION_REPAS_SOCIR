@@ -28,7 +28,7 @@ const postUsers = async (req, res) => {
 const getUsers = async (req, res) => {
     pool.connect()
         .then(client => {
-            return client.query('SELECT * FROM condiments')
+            return client.query('SELECT * FROM utilisateurs')
                 .then(result => {
                     const agents = result.rows;
                     res.json(agents);

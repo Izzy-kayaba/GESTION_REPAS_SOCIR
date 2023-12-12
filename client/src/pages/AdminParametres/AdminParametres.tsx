@@ -8,4 +8,4 @@ function AdminParametres() {
   )
 }
 
-export default AdminParametres
+export default AdminParametres;

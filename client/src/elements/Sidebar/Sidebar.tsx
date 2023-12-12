@@ -44,25 +44,14 @@ const Sidebar: React.FC = () => {
 
                 {
                     showParams ? <>
-                        <NavLink className={customClassName} to="/admin/parametres">
-                            Parametres 1
+                        <NavLink className={customClassName} to="/admin/parametres/profile">
+                            Profile
                         </NavLink>
-
-                        <NavLink className={customClassName} to="/admin/parametres">
-                            Parametres 2
-                        </NavLink>
-
-                        <NavLink className={customClassName} to="/admin/parametres">
-                            Parametres 1
-                        </NavLink>
-                        <NavLink className={customClassName} to="/admin/parametres">
-                            Parametres 2
+                        <NavLink className={customClassName} to="/admin/parametres/utilisateurs">
+                            Utilisateurs
                         </NavLink>
                     </> : null
                 }
-
-
-
             </ul>
         </nav >
     );

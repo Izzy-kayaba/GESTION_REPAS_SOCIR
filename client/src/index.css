@@ -35,6 +35,11 @@
   /* positioner elements enfants*/
 }
 
+.settings_routes {
+  width: 100%;
+overflow: visible;
+}
+
 #topbar {
   display: none;
 }
