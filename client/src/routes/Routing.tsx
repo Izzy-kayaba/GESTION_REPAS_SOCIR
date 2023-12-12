@@ -9,7 +9,7 @@ import {
 import Login from '../pages/Login/Login';
 import NotFound from '../pages/NotFound/NotFound';
 import AdminRoutes from '../routes/AdminRoutes'
-import { useUserContext } from '../Helpers/UserContext';
+import { useUserContext } from '../helpers/UserContext';
 
 const Routing: React.FC = () => {
 

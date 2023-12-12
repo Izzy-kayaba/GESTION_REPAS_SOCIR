@@ -1,5 +1,5 @@
 import './App.css';
-import { UserProvider } from './Helpers/UserContext';
+import { UserProvider } from './helpers/UserContext';
 import Routing from './routes/Routing';
 
 function App() {
@@ -7,6 +7,7 @@ function App() {
     <UserProvider>
       <Routing />
     </UserProvider>
+
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import "./Registration.module.css";
-import { useUserContext } from '../../Helpers/UserContext';
+import { useUserContext } from '../../helpers/UserContext';
 import { NavLink } from 'react-router-dom';
 import { error } from 'console';
 
