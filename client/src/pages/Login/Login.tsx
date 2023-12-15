@@ -1,7 +1,9 @@
 import React, { FormEvent, useState } from 'react';
 import "./Login.css";
 import { useUserContext } from '../../helpers/UserContext';
-import { NavLink, Router, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type formType = {
     email_utilisateur: string,
@@ -54,15 +56,21 @@ function Login() {
 
                 // Redirect to the specified URL
                 router(data.redirectUrl);
+
+                // Show success toast
+                toast.success('Logged in successfully!', { position: toast.POSITION.TOP_LEFT });
             }
             else {
-                console.log("Error", response)
+                console.log("Error", response);
+                // Show error toast
+                toast.error('Login failed. Please check your credentials.', { position: toast.POSITION.TOP_LEFT });
             }
 
         } catch (error) {
             console.log(error)
+            // Show error toast
+            toast.error('An error occurred. Please try again later.', { position: toast.POSITION.TOP_LEFT });
         }
-
     }
 
 
