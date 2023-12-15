@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AdminUserDetails = () => {
+const Users = () => {
   return (
     <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
     <div className="card text-center">
@@ -13,4 +13,4 @@ const AdminUserDetails = () => {
   )
 }
 
-export default AdminUserDetails
+export default Users

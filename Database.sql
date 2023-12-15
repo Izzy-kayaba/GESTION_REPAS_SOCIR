@@ -6,10 +6,18 @@ CREATE TABLE agents (
     prenom_agent VARCHAR(100) NOT NULL,
     contact VARCHAR(20),
     email_agent VARCHAR(100),
+    id_dep INT Not NULL,
+    id_fontion INT NOT NULL,
+    id_entite INT NOT NULL,
+    id_tour INT NOT NULL,
     image BYTEA,
     sexe CHAR(1),
     lieu_naiss VARCHAR(100),
-    date_naiss DATE
+    date_naiss DATE,
+    FOREIGN KEY (id_dep) REFERENCES depservice(id_dep),
+    FOREIGN KEY (id_fontion) REFERENCES fontions(id_fontion),
+    FOREIGN KEY (id_entite) REFERENCES entities(id_entite),
+    FOREIGN KEY (id_tour) REFERENCES tours(id_tour),
 );
 
 CREATE TABLE aliments (
@@ -63,7 +71,7 @@ CREATE TABLE repas_agents (
     nom_agent VARCHAR(255) NOT NULL, -- Assuming the name is a string
     id_condiment INT NOT NULL,
     id_accompagnement INT NOT NULL,
-    id_aliments INT NOT NULL,
+    id_aliment INT NOT NULL,
     prix numeric NOT NULL,
     date_cree TIMESTAMP, -- Assuming you want a timestamp, not DATETIME
     date_efface TIMESTAMP,

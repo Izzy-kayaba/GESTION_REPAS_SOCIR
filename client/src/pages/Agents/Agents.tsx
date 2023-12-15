@@ -19,7 +19,7 @@ type Agent = {
   date_naiss: string;
 }
 
-const AdminAgents: React.FC = () => {
+const Agents: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
 
@@ -94,4 +94,4 @@ const AdminAgents: React.FC = () => {
   );
 };
 
-export default AdminAgents;
+export default Agents;

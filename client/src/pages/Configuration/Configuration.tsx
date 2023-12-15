@@ -1,6 +1,8 @@
 import React from 'react'
 
-const AdminDashboard = () => {
+
+const Configuration: React.FC = () => {
+
   return (
     <main>
       <div className="container-fluid">
@@ -8,7 +10,7 @@ const AdminDashboard = () => {
           <div className="col-lg-3 col-md-6 mb-2">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Card 1</h5>
+                <h5 className="card-title">Agents</h5>
                 <p className="card-text">This is a sample card content.</p>
               </div>
             </div>
@@ -16,7 +18,7 @@ const AdminDashboard = () => {
           <div className="col-lg-3 col-md-6 mb-2">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Card 2</h5>
+                <h5 className="card-title">Entites</h5>
                 <p className="card-text">Another sample card content.</p>
               </div>
             </div>
@@ -24,7 +26,7 @@ const AdminDashboard = () => {
           <div className="col-lg-3 col-md-6 mb-2">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Card 3</h5>
+                <h5 className="card-title">Departements</h5>
                 <p className="card-text">More card content goes here.</p>
               </div>
             </div>
@@ -32,7 +34,7 @@ const AdminDashboard = () => {
           <div className="col-lg-3 col-md-6 mb-2">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Card 4</h5>
+                <h5 className="card-title">Fontions</h5>
                 <p className="card-text">Additional card content.</p>
               </div>
             </div>
@@ -43,4 +45,7 @@ const AdminDashboard = () => {
   )
 }
 
-export default AdminDashboard
+export default Configuration;
+
+
+

@@ -15,9 +15,10 @@ router.post("/register", async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" })
         }
-
-        const newUser = await User.create(nom_utilisateur, email_utilisateur, mot_de_passe);
-        res.status(201).json({ message: "User registrered successfully !", user: newUser });
+        else {
+            const newUser = await User.create(nom_utilisateur, email_utilisateur, mot_de_passe);
+            res.status(201).json({ message: "User registrered successfully !", user: newUser });
+        }
 
     } catch (error) {
 
@@ -47,7 +48,7 @@ router.post("/login", passport.authenticate("local"), async (req, res) => {
                 { expiresIn: "1h" }
             )
             const { mot_de_passe, ...userWithoutPassword } = user;
-            return res.status(200).json({ userWithoutPassword, token, redirectUrl:"/admin", message: 'Login successful',  });
+            return res.status(200).json({ userWithoutPassword, token, redirectUrl: "/admin", message: 'Login successful', });
         } else {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
@@ -61,8 +62,8 @@ router.post("/login", passport.authenticate("local"), async (req, res) => {
 // Logout
 router.get("/logout", (req, res) => {
     req.logOut();
-    req.flash("success","Successfully logged out !");
-    res.status(200).json({redirectUrl:"/"})
+    req.flash("success", "Successfully logged out !");
+    res.status(200).json({ redirectUrl: "/" })
 })
 
 

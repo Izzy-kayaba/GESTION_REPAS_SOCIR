@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AdminAgentDetails = () => {
+const AdminAgentDetails: React.FC = () => {
   return (
     <div className="d-flex align-items-center justify-content-center vh-100">
       <div className="card text-center">
