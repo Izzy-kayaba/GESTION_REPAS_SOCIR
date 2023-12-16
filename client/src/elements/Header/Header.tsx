@@ -7,11 +7,11 @@ const Header: React.FC = () => {
     return (
         <div className="d-flex align-items-center justify-content-between border border-bottom mb-3 p-2">
             <div>
-                <h3>Socir</h3>
+                <h3>SOCIR SA</h3>
             </div>
             <div className="d-flex align-items-center gap-2">
                 <Nav.Link href="#home">
-                    Chada Djuma
+                    BENIE BILWANDAY
                 </Nav.Link>
                 <Nav.Link href="#home">
                     <img src="https://via.placeholder.com/40x40" className="rounded-circle" />
