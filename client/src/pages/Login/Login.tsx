@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import "./Login.css";
+import style from "./Login.module.css"
 import { useUserContext } from '../../helpers/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -75,17 +75,17 @@ function Login() {
 
 
     return (
-        <div className="cover">
-            <div className="carte_parent">
-                <div className="carte">
-                    <h2>
+        <div className={style.cover}>
+            <div className={style.carte_parent}>
+                <div className={style.carte}>
+                    <h2 className={style.h2}>
                         SOCIR
                     </h2>
-                    <h4>GESTION REPAS </h4>
-                    <form onSubmit={handleSubmit}>
-                        <input type="email" name="email_utilisateur" id="email_utilisateur" placeholder="Adresse email" onChange={handleChange} />
-                        <input type="password" name="mot_de_passe" id="mot_de_passe" placeholder="Mot de passe" onChange={handleChange} />
-                        <button className="login_bouton" type="submit">Se connecter</button>
+                    <h4 className={style.h4}>GESTION REPAS </h4>
+                    <form onSubmit={handleSubmit} className={style.form}>
+                        <input type="email" name="email_utilisateur" id="email_utilisateur" placeholder="Adresse email" onChange={handleChange} className={style.input} />
+                        <input type="password" name="mot_de_passe" id="mot_de_passe" placeholder="Mot de passe" onChange={handleChange} className={style.input} />
+                        <button type="submit" className={style.login_bouton} >Se connecter</button>
                     </form>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./Sidebar.css"
+import style from "./Sidebar.module.css"
 import { Button, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { GiMeal } from "react-icons/gi";
@@ -8,16 +8,16 @@ import { IoMdArrowDropup } from "react-icons/io";
 
 const Sidebar: React.FC = () => {
     const customClassName = ({ isActive }: { isActive: boolean }) =>
-        isActive ? 'link_nav active' : 'link_nav';
-    const [showParams, setShowParams] = useState<Boolean>(false);
+        isActive ? `${style.link_nav} ${style.active}` : `${style.link_nav}`;
+    const [showParams, setShowParams] =useState<Boolean>(false);
     const handleDrowpDown = () => {
         setShowParams(!showParams);
     }
 
     return (
-        <nav id="sidebar">
-            <h2 className="titre-menu">Administration</h2>
-            <ul>
+        <nav id="sidebar" className={style.nav}>
+            <h2 className={style.title_menu}>Administration</h2>
+            <ul className={style.ul}>
                 <NavLink className={customClassName} to="/admin">
                     TABLEAU DE BORD
                 </NavLink>
@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
                     Audit
                 </NavLink>
 
-                <a onClick={handleDrowpDown} className="btn-param" >
+                <a onClick={handleDrowpDown} className={style.btn_param} >
                     CONFIGURATION {showParams ? <IoMdArrowDropdown /> : <IoMdArrowDropup />}
                 </a>
                 {

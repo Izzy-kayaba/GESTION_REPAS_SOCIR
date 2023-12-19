@@ -8,5 +8,5 @@ router.get("/", AccompagnementsController.getAccompagnements);
 // router.post("/", AccompagnementsController.createNewAccompagnements);
 // router.put("/:id", AccompagnementsController.updateAgent);
 // router.get("/", AccompagnementsController.getAccompagnements);
-
+ 
 module.exports = router;

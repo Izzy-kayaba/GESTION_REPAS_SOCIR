@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Nav, NavDropdown } from 'react-bootstrap';
 import { RiArrowDropDownLine } from "react-icons/ri";
-
+import { useUserContext } from "../../helpers/UserContext"
 
 const Header: React.FC = () => {
+
+    const { userProfile } = useUserContext();
+
     return (
         <div className="d-flex align-items-center justify-content-between border border-bottom mb-3 p-2">
             <div>
@@ -11,7 +14,7 @@ const Header: React.FC = () => {
             </div>
             <div className="d-flex align-items-center gap-2">
                 <Nav.Link href="#home">
-                    BENIE BILWANDAY
+                    {userProfile?.nom_utilisateur.toUpperCase()}
                 </Nav.Link>
                 <Nav.Link href="#home">
                     <img src="https://via.placeholder.com/40x40" className="rounded-circle" />
