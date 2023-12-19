@@ -22,8 +22,8 @@ const Sidebar: React.FC = () => {
                     TABLEAU DE BORD
                 </NavLink>
                 <NavLink className={customClassName} to="/admin/repas-du-jour">
-                     Repas du Jour 
-                     {/* <GiMeal className="border border-1" /> */}
+                    Repas du Jour
+                    {/* <GiMeal className="border border-1" /> */}
                 </NavLink>
                 <NavLink className={customClassName} to="/admin/ajouter-participant">
                     Ajouter participant
