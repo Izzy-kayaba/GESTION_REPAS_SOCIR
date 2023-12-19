@@ -7,6 +7,7 @@ import SettingsRoutes from './SettingsRoutes';
 import AdminParticipants from '../pages/AdminParticipants/AdminParticipants';
 import AdminRepas from '../pages/AdminRepas/AdminRepas';
 import AdminAudit from '../pages/AdminAudit/AdminAudit';
+import Agents from '../pages/Agents/Agents';
 
 const AdminRoutes = () => {
     return (
@@ -18,7 +19,7 @@ const AdminRoutes = () => {
                         <Route key="dashboard" path="/" element={<AdminDashboard />} />,
                         <Route key="repas-du-jour" path="repas-du-jour" element={<AdminRepas />} />,
                         <Route key="ajouter-participant" path="ajouter-participant" element={<AdminParticipants />} />,
-                        <Route key="audit" path="audit" element={<AdminAudit />} />,
+                        <Route key="audit" path="audit" element={<Agents />} />,
                         <Route key="configuration" path="configuration/*" element={<SettingsRoutes />} />,
                         <Route key="not-found" path="*" element={<Navigate to="/admin" />} />,
                     ]}
