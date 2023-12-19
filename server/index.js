@@ -5,7 +5,6 @@ const flash = require("connect-flash");
 const cors = require('cors');
 const passport = require("./config/passport");
 
-
 const bodyParser = require('body-parser');
 const { pool } = require("./config/dbConfig");
 const app = express();
