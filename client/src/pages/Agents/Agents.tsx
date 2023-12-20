@@ -4,6 +4,7 @@ import ModalTemplate from '../../elements/Modal/Modal';
 import Loader from '../../elements/Loader/Loader';
 import useFetch from '../../hooks/useFetch';
 import CustomTable from '../../elements/Table/Table';
+import { NavLink } from 'react-router-dom';
 
 type Agent = {
   id_agent?: number;
@@ -67,10 +68,20 @@ const Agents: React.FC = () => {
   // Rendu du composant
   return (
     <div className="p-2">
+
+      <div className="py-3">
+        <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2 ">
+          Precedent
+        </NavLink>
+      </div>
+
+
       {/* Button to open the modal */}
       <Button variant="primary" onClick={() => setShowModal(true)}>
         Ajouter un agent
       </Button>
+
+
 
       <ModalTemplate
         show={showModal}
