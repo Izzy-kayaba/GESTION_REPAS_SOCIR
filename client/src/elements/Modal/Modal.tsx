@@ -4,7 +4,7 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 type ModalFormProps = {
     show: boolean;
     onHide: () => void;
-    onSubmit: (formData: AgentFormData) => void;
+    onSubmit: (formData: any) => void;
 };
 
 type AgentFormData = {
@@ -33,79 +33,59 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
         sexe: '',
         lieu_naiss: '',
         date_naiss: '',
-      };
+    };
 
-  const [formData, setFormData] = useState<AgentFormData>(initialFormData);
-  const [formErrors, setFormErrors] = useState<Partial<AgentFormData>>({});
+    const [formData, setFormData] = useState<any>(initialFormData);
+    //   const [formErrors, setFormErrors] = useState<Partial<AgentFormData>>({});
 
-  const resetForm = () => {
-    setFormData(initialFormData);
-  };
+    const resetForm = () => {
+        setFormData(initialFormData);
+    };
 
     const handleChange = (e: React.ChangeEvent<any>) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
+        setFormData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-    const validateForm = () => {
-        const errors: Partial<AgentFormData> = {};
-
-        // Example validation (you can add more specific validation rules)
-        if (!formData.matr_agent.trim()) {
-            errors.matr_agent = 'Le matricule est requis';
-        }
-        if (!formData.nom_agent.trim()) {
-            errors.nom_agent = 'Le nom est requis';
-        }
-        // Add more validation rules for other fields...
-
-        setFormErrors(errors);
-
-        // Return true if there are no errors, false otherwise
-        return Object.keys(errors).length === 0;
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Validate the form
-        const isValid = validateForm();
+        // const isValid = validateForm();
 
-        if (isValid) {
-            // Perform the submit action (e.g., send data to the server)
-            try {
-                const response = await fetch('http://localhost:1100/api/agents', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                });
+        // Perform the submit action (e.g., send data to the server)
+        try {
+            const response = await fetch('http://localhost:1100/api/agents', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-                if (response.ok) {
-                    // Successful submission
-                    console.log('Agent added successfully!');
-                    onSubmit(formData);
-                    onHide();
-                    
-                } else {
-                    // Handle error responses from the server
-                    console.error('Failed to add agent:', response.statusText);
-                }
-            } catch (error) {
-                // Handle network or other errors
-                console.error('Error submitting form:', error);
+            if (response.ok) {
+                // Successful submission
+                console.log('Agent added successfully!');
+                onSubmit(formData);
+                onHide();
+            } else {
+                // Handle error responses from the server
+                console.error('Failed to add agent:', response.statusText);
             }
+        } catch (error) {
+            // Handle network or other errors
+            console.error('Error submitting form:', error);
         }
     };
 
     return (
         <Modal show={show} onHide={() => { resetForm(); onHide(); }} centered>
             <Modal.Header closeButton>
-                <Modal.Title  className="my-0">Ajouter un nouvel agent</Modal.Title>
+                <Modal.Title className="my-0">Ajouter un nouvel agent</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
@@ -116,11 +96,9 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="matr_agent"
                             value={formData.matr_agent}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.matr_agent}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.matr_agent}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -131,11 +109,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="nom_agent"
                             value={formData.nom_agent}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.nom_agent}
+                            // isInvalid={!!formErrors.nom_agent}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.nom_agent}
+                            {/* {formErrors.nom_agent} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -146,11 +124,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="postnom_agent"
                             value={formData.postnom_agent}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.postnom_agent}
+                            // isInvalid={!!formErrors.postnom_agent}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.postnom_agent}
+                            {/* {formErrors.postnom_agent} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -161,11 +139,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="prenom_agent"
                             value={formData.prenom_agent}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.prenom_agent}
+                            // isInvalid={!!formErrors.prenom_agent}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.prenom_agent}
+                            {/* {formErrors.prenom_agent} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -176,11 +154,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="contact"
                             value={formData.contact}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.contact}
+                            // isInvalid={!!formErrors.contact}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.contact}
+                            {/* {formErrors.contact} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -191,11 +169,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="email_agent"
                             value={formData.email_agent}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.email_agent}
+                            // isInvalid={!!formErrors.email_agent}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.email_agent}
+                            {/* {formErrors.email_agent} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -220,7 +198,7 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="sexe"
                             value={formData.sexe}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.sexe}
+                            // isInvalid={!!formErrors.sexe}
                             className="my-0"
                         >
                             <option value="">Sélectionnez le sexe</option>
@@ -228,7 +206,7 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             <option value="F">Féminin</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.sexe}
+                            {/* {formErrors.sexe} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -239,11 +217,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="lieu_naiss"
                             value={formData.lieu_naiss}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.lieu_naiss}
+                            // isInvalid={!!formErrors.lieu_naiss}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.lieu_naiss}
+                            {/* {formErrors.lieu_naiss} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -254,11 +232,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                             name="date_naiss"
                             value={formData.date_naiss}
                             onChange={handleChange}
-                            isInvalid={!!formErrors.date_naiss}
+                            // isInvalid={!!formErrors.date_naiss}
                             className="my-0"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {formErrors.date_naiss}
+                            {/* {formErrors.date_naiss} */}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -268,11 +246,11 @@ const ModalTemplate: React.FC<ModalFormProps> = ({ show, onHide, onSubmit }) => 
                     </Button>
 
                     {/* Display errors at the top of the form */}
-                    {Object.keys(formErrors).length > 0 && (
+                    {/* {Object.keys(formErrors).length > 0 && (
                         <Alert variant="danger" className="mt-3">
                             Il y a des erreurs dans le formulaire. Veuillez les corriger.
                         </Alert>
-                    )}
+                    )} */}
                 </Form>
             </Modal.Body>
         </Modal>

@@ -7,21 +7,7 @@ import CustomTable from '../../elements/Table/Table';
 const AdminAudit: React.FC = () => { // Fetch data from the repas_agents table
 
     moment.locale("fr"); // Translate the date in french
-
     const todayFormatted = moment().format('Do MMMM YYYY');  // Get today's date in the same format as 'date_cree'
-
-    const { data: repasAgents, isLoading, isError }: any = useFetch({ endpoint: "api/repas-agents" });
-
-    // Fetch data from related tables (agents, condiments, accompagnements, aliments)
-    const { data: agents }: any = useFetch({ endpoint: "api/agents" });
-    const { data: condiments }: any = useFetch({ endpoint: "api/condiments" });
-    const { data: accompagnements }: any = useFetch({ endpoint: "api/accompagnements" });
-    const { data: aliments }: any = useFetch({ endpoint: "api/aliments" });
-
-    // Use state to manage the human-readable data
-    const [displayData, setDisplayData] = useState<any[]>([]);
-    // Filter data where 'date_cree' is equal to today
-    const filteredData = displayData.filter((row) => moment(row.date_cree).format('Do MMMM YYYY') === todayFormatted);
 
     const tableColumns = [
         { title: 'MAT', dataKey: 'matr_agent' },
@@ -34,6 +20,24 @@ const AdminAudit: React.FC = () => { // Fetch data from the repas_agents table
         { title: 'Date Créé', dataKey: 'date_cree' },
         { title: 'Commentaires', dataKey: 'commentaires' },
     ];
+
+
+
+    const { data: repasAgents, isLoading, isError }: any = useFetch({ endpoint: "api/repas-agents" });
+
+    // Fetch data from related tables (agents, condiments, accompagnements, aliments)
+    const{data : agents}: any = useFetch({ endpoint: "api/agents" });
+    const { data: condiments }: any = useFetch({ endpoint: "api/condiments" });
+    const { data: accompagnements }: any = useFetch({ endpoint: "api/accompagnements" });
+    const { data: aliments }: any = useFetch({ endpoint: "api/aliments" });
+
+    console.log(condiments)
+    // Use state to manage the human-readable data
+    const [displayData, setDisplayData] = useState<any[]>([]);
+    // Filter data where 'date_cree' is equal to today
+    const filteredData = displayData.filter((row) => moment(row.date_cree).format('Do MMMM YYYY') === todayFormatted);
+
+
 
     useEffect(() => {
         // Combine data from repas_agents with related tables

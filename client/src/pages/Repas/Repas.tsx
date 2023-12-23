@@ -24,6 +24,19 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
     // Filter data where 'date_cree' is equal to today
     const filteredData = displayData.filter((row) => moment(row.date_cree).format('Do MMMM YYYY') === todayFormatted);
 
+    // State in the parent to hold the boolean value
+    const [isChildChecked, setIsChildChecked] = React.useState(false);
+
+    // Callback function to receive the boolean value from the child
+    const handleChildToggle = (isChecked: boolean) => {
+        setIsChildChecked(isChecked);
+    };
+
+    const handleChildQueries =(a: string, b: string) =>{
+        // setColum(a)
+        // setValue(b)
+      }
+
     const tableColumns = [
         { title: 'ID', dataKey: 'matr_agent' },
         { title: 'Agent', dataKey: 'nom_agent' },
@@ -63,7 +76,7 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
 
     return (
         <div>
-            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10} />
+            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10}/>
         </div>
     );
 };

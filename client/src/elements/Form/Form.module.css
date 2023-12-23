@@ -1,0 +1,7 @@
+.row {
+    background-color: #e9ecef !important;
+    padding-block: 2rem;
+    margin-block: 2rem;
+    border: 1px solid #edf0f1;
+    border-radius: 0.4rem;
+}

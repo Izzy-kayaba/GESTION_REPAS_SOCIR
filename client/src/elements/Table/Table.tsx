@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 // Define interfaces for table columns and props
 interface TableColumn {
@@ -18,6 +19,7 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
 
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [isChecked, setIsChecked] = useState(false);
 
   // Function to handle sorting
   const handleSort = (field: string) => {
@@ -74,7 +76,6 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
   };
 
   const handleNextPage = () => {
-
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
@@ -99,12 +100,14 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
         <tbody>
           {/* Map through current data and create tr elements */}
           {currentData.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr key={rowIndex} role='button'>
               {columns.map((column, colIndex) => (
                 <td key={colIndex} style={tdStyle}>
-                  {isDate(row[column.dataKey])
-                    ? moment(row[column.dataKey]).format('Do MMMM YYYY')
-                    : row[column.dataKey]}
+                  <Link to={`./${row?.id_agent}`} className="nav-link">
+                    {isDate(row[column.dataKey])
+                      ? moment(row[column.dataKey]).format('Do MMMM YYYY')
+                      : row[column.dataKey]}
+                  </Link>
                 </td>
               ))}
             </tr>

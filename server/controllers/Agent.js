@@ -2,12 +2,47 @@ const { pool } = require("../config/dbConfig");
 
 // Route to fetch data from the 'agents' table
 const getAgents = async (req, res) => {
+    const { column, value } = req.query;
+    let result = []; // Allows to make queries on condition
+
+    try {
+        const client = await pool.connect();
+
+        if (column !== undefined && value !== undefined) {
+            result = await client.query(`SELECT * FROM agents WHERE ${column} = $1`, [value]);
+        }
+
+        else {
+            result = await client.query(`SELECT * FROM agents`);
+        }
+
+        if (result.rows.length === 0) {
+            // If no agent is found with the specified ID
+            res.status(404).json({ error: 'No agents found with the specified criteria' });
+        } else {
+            const agents = result.rows;
+            res.json(agents);
+        }
+        client.release();
+    } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+// Route to fecth a single row
+const getAgentsById = async (req, res) => {
+    const agentId = req.params.id;
     pool.connect()
         .then(client => {
-            return client.query('SELECT * FROM agents')
+            return client.query('SELECT * FROM agents WHERE id_agent = $1', [agentId])
                 .then(result => {
-                    const agents = result.rows;
-                    res.json(agents);
+                    if (result.rows.length === 0) {
+                        // If no agent is found with the specified ID
+                        res.status(404).json({ error: 'Agent not found' });
+                    } else {
+                        res.json({ agents: [result.rows[0]] });
+                    }
                 })
                 .catch(err => {
                     console.error('Error executing query', err);
@@ -19,28 +54,6 @@ const getAgents = async (req, res) => {
             console.error('Error acquiring client', err);
             res.status(500).send('Internal Server Error');
         });
-};
-
-// Route to fecth a single row
-const getAgentsById = async (req, res) => {
-    const agentId = req.params.id;
-
-    try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM agents WHERE id_agent = $1', [agentId]);
-
-        if (result.rows.length === 0) {
-            // If no agent is found with the specified ID
-            res.status(404).json({ error: 'Agent not found' });
-        } else {
-            res.json({ agent: result.rows[0] });
-        }
-
-        client.release();
-    } catch (error) {
-        console.error('Error executing query', error);
-        res.status(500).send('Internal Server Error');
-    }
 }
 
 // Route to create an new agent

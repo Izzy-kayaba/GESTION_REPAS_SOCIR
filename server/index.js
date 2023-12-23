@@ -33,7 +33,7 @@ app.use(session({
   secret: "secret",
   resave: false,
   saveUninitialized: true,
-  cookie:{maxAge:86400000} // session expires after 24h
+  cookie: { maxAge: 86400000 } // session expires after 24h
 }))
 
 app.use(passport.initialize());
@@ -53,6 +53,7 @@ app.use("/api/agents", agentRoutes);
 app.use("/api/aliments", alimentRoutes);
 app.use("/api/condiments", condimentRoutes);
 app.use("/api/accompagnements", accompagnementRoutes);
+
 
 // Route to fetch data from the 'agents' table
 app.get('/api/repas-agents', async (req, res) => {
