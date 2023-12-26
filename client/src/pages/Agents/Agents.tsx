@@ -26,8 +26,8 @@ const Agents: React.FC = () => {
 
   const tableColumns = [
     { title: 'Matricule', dataKey: 'matr_agent' },
-    { title: 'Nom', dataKey: 'nom_agent' },
     { title: 'Prenom', dataKey: 'prenom_agent' },
+    { title: 'Nom', dataKey: 'nom_agent' },
     { title: 'Sexe', dataKey: 'sexe' },
     { title: 'Date de Naissance', dataKey: 'date_naiss' },
     { title: 'Tel', dataKey: 'contact' },
@@ -36,18 +36,6 @@ const Agents: React.FC = () => {
 
   // State in the parent to hold the boolean value
   const [isChildChecked, setIsChildChecked] = useState(false);
-  const [column, setColumn] = useState<string | undefined>(undefined);
-  const [value, setValue] = useState<string | undefined>(undefined)
-
-  // Callback function to receive the boolean value from the child
-  const handleChildToggle = (isChecked: boolean) => {
-    setIsChildChecked(isChecked);
-  };
-
-  const handleChildQueries = (a: string, b: string) => {
-    setColumn(a)
-    setValue(b)
-  }
 
   // State hooks to store the data
   let agents: any = useFetch({ endpoint: "api/agents" });
@@ -75,38 +63,37 @@ const Agents: React.FC = () => {
 
   // Rendu du composant
   return (
-    <div className="p-2">
+    <>
 
-      <div className="d-flex justify-content-between">
-        <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2 ">
-          Precedent
-        </NavLink>
+      {!isChildChecked ?
+        <div className="d-flex justify-content-between p-2">
+          <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2">
+            Precedent
+          </NavLink>
 
-        <Button variant="primary" onClick={() => setIsChildChecked(!isChildChecked)}>
-          {isChildChecked ? <>Voir tableau</> : <> Nouveau agent</>}
-        </Button>
-      </div>
+          <Button variant="primary" onClick={() => setIsChildChecked(!isChildChecked)}>
+            Nouveau agent
+          </Button>
+        </div>
+        : null}
 
       {isChildChecked ?
-        <FormTemplate>
-          <AgentsForm />
-        </FormTemplate>
+        <AgentsForm />
         :
-        <>
+        <div className="p-2">
           {/* Formulaire de recherche */}
           <Form>
             <FormControl
               type="text"
-              placeholder="Rechercher par Nom"
+              placeholder="Rechercher agent par nom"
               value={searchTerm}
               onChange={handleSearch}
             />
           </Form>
-          <CustomTable columns={tableColumns} data={filteredAgents} rowsPerPage={5} />
-        </>
+          <CustomTable columns={tableColumns} data={filteredAgents} rowsPerPage={10} />
+        </div>
       }
-
-    </div>
+    </>
   );
 };
 

@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Alert } from 'react-bootstrap';
-import style from "../../elements/Form/Form.module.css";
-import { NavLink, useParams } from 'react-router-dom';
+import female from "../../assets/female.jpg"
+import male from "../../assets/male.jpg"
+import styles from "../../elements/Form/Form.module.css";
+import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import useFetch from "../../hooks/useFetch";
 import FormTemplate from "../../elements/Form/FormTemplate";
+import usePost from "../../hooks/usePost";
+import useUpdate from "../../hooks/useUpdate";
+import style from "./Agents.module.css"
+
+type AgentType = {
+    id_agent: string,
+    matr_agent: string,
+    nom_agent: string,
+    postnom_agent: string,
+    prenom_agent: string,
+    sexe: 'M' | 'F';
+    contact: string;
+    email_agent: string;
+    lieu_naiss: string;
+    date_naiss: string;
+}
+
+const initial_state: AgentType = {
+    id_agent: "",
+    matr_agent: "",
+    nom_agent: "",
+    postnom_agent: "",
+    prenom_agent: "",
+    sexe: "M",
+    contact: "",
+    email_agent: "",
+    lieu_naiss: "",
+    date_naiss: ""
+}
 
 const AgentsForm: React.FC = () => {
     const router = useParams();
-    const agent: any = useFetch({ endpoint: `api/agents/${router?.id}` })
+    const route = useNavigate();
+    const agent: any = useFetch({ endpoint: `api/agents/${router?.id}` });
+    const [formData, setFormData] = useState<AgentType>(initial_state);
+
+    const [url, setUrl] = useState("api/agents");
 
     const handleChange = (e: React.ChangeEvent<any>) => {
         const { name, value } = e.target;
@@ -18,58 +53,51 @@ const AgentsForm: React.FC = () => {
     };
 
     const resetForm = () => {
-        setFormData({});
+        setFormData(initial_state);
     };
 
-    const [formData, setFormData] = useState<any>({});
-
     useEffect(() => {
-        if (agent?.data?.agents?.length > 0) {
+        if (agent.data?.agents?.length > 0) {
             setFormData(agent.data?.agents[0]);
+            setUrl(`api/agents/${router?.id}`)
         }
-    }, [agent])
+    }, [agent]);
 
+    const { httpPost } = usePost({ endpoint: url });
+    const { httpPut } = useUpdate({ endpoint: url });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Perform the submit action (e.g., send data to the server)
-        try {
-            const response = await fetch('http://localhost:1100/api/agents', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (response.ok) {
-                // Successful submission
-                console.log('Agent added successfully!');
-            } else {
-                // Handle error responses from the server
-                console.error('Failed to add agent:', response.statusText);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error submitting form:', error);
+        if (formData?.id_agent === undefined) {
+            //If there is no presence of ID, c
+            httpPost(formData)
+                .then(() => {
+                    setFormData(initial_state);
+                })
+        } else {
+            httpPut(formData)
+                .then(() => {
+                    setFormData(initial_state);
+                    route("../agents")
+                })
         }
     };
     return (
         <>
             <div className="d-flex justify-content-between px-2">
-                <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2 ">
-                    Precedent
-                </NavLink>
-
                 <Button variant="primary">
-                    Voir tableau
+                    Annuler
                 </Button>
+
+                <NavLink to={"../agents"} className="nav-link d-inline border border-1 rounded-2 p-2 ">
+                    Voir tableau
+                </NavLink>
             </div>
             <FormTemplate>
                 <Form onSubmit={handleSubmit}>
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">Titre</h5>
+                    <div className={`row ${styles.row}`}>
+                        <h5 className="fw-bold">MATRICULE ET PHOTO</h5>
                         <div className='col-6'>
                             <Form.Label>Matricule</Form.Label >
                             <Form.Control
@@ -84,25 +112,19 @@ const AgentsForm: React.FC = () => {
                         </div>
 
                         <div className='col-6'>
-                            {/* <Form.Group controlId="image">
-                        <Form.Label>Image</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="image"
-                            value={formData.image}
-                            onChange={handleChange}
-                            isInvalid={!!formErrors.image}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {formErrors.image}
-                        </Form.Control.Feedback>
-                    </Form.Group> */
-                            }
+                            <Form.Group controlId="image">
+                                <img
+                                    src={formData?.sexe === "M" ? male : female}
+                                    alt={`image ${formData?.sexe}`}
+                                    className={style.avatar}
+                                />
+                                <Form.Control.Feedback type="invalid" />
+                            </Form.Group>
                         </div>
                     </div>
 
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">Titre</h5>
+                    <div className={`row ${styles.row}`}>
+                        <h5 className="fw-bold">COORDONNÉES PERSONNELLES</h5>
                         <div className="col-6">
                             <Form.Group controlId="nom_agent">
                                 <Form.Label>Nom</Form.Label>
@@ -170,8 +192,8 @@ const AgentsForm: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">Titre</h5>
+                    <div className={`row ${styles.row}`}>
+                        <h5 className="fw-bold">COORDONNÉES DE CONTACT</h5>
                         <div className="col-6">
                             <Form.Group controlId="contact">
                                 <Form.Label>Contact</Form.Label>
@@ -206,8 +228,8 @@ const AgentsForm: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">Titre</h5>
+                    <div className={`row ${styles.row}`}>
+                        <h5 className="fw-bold">INFORMATIONS DE NAISSANCE ET DE RÉSIDENCE</h5>
                         <div className="col-6">
                             <Form.Group controlId="lieu_naiss">
                                 <Form.Label>Lieu de Naissance</Form.Label>

@@ -9,7 +9,7 @@ interface Props {
 const FormTemplate: React.FC<Props> = ({ children }) => {
 
   return (
-    <div className="p-3">
+    <div className="p-4">
         {children}
     </div>
   )

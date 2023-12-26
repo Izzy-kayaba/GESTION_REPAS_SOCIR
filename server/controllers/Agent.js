@@ -13,7 +13,7 @@ const getAgents = async (req, res) => {
         }
 
         else {
-            result = await client.query(`SELECT * FROM agents`);
+            result = await client.query(`SELECT * FROM agents ORDER BY matr_agent ASC NULLS LAST;`);
         }
 
         if (result.rows.length === 0) {
@@ -150,8 +150,7 @@ const updateAgent = async (req, res) => {
             res.status(404).json({ error: 'Agent not found' });
         } else {
             const newAgent = result.rows[0];
-            res.json({ message: 'Agent updated successfully' });
-            res.json({ data: { newAgent } })
+            res.json({ message: 'Agent updated successfully', data: { newAgent }});
         }
 
         client.release();

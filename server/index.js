@@ -41,8 +41,7 @@ app.use(passport.session());
 
 app.use(flash());
 
-
-// Routes
+// Route
 app.get('/', (req, res) => {
   res.send('Hello, welcome to your Node.js app!');
 });
@@ -50,10 +49,9 @@ app.get('/', (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/agents", agentRoutes);
-app.use("/api/aliments", alimentRoutes);
+app.use("/api/aliments", alimentRoutes); 
 app.use("/api/condiments", condimentRoutes);
 app.use("/api/accompagnements", accompagnementRoutes);
-
 
 // Route to fetch data from the 'agents' table
 app.get('/api/repas-agents', async (req, res) => {
@@ -62,7 +60,7 @@ app.get('/api/repas-agents', async (req, res) => {
     const result = await client.query('SELECT * FROM repas_agents WHERE date_efface IS NULL');
     const agents = result.rows;
     res.json(agents);
-    client.release();
+    client.release(); 
   } catch (err) {
     console.error('Error executing query', err);
     res.status(500).send('Internal Server Error');

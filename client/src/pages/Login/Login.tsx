@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import style from "./Login.module.css"
 import { useUserContext } from '../../helpers/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type formType = {
@@ -54,22 +54,22 @@ function Login() {
                 // Update user context value using setUserProfile
                 setUserProfile(data?.userWithoutPassword);
 
+                // Show success toast
+                toast.success('Logged in successfully!', { position: toast.POSITION.TOP_RIGHT });
+
                 // Redirect to the specified URL
                 router(data.redirectUrl);
-
-                // Show success toast
-                toast.success('Logged in successfully!', { position: toast.POSITION.TOP_LEFT });
             }
             else {
                 console.log("Error", response);
                 // Show error toast
-                toast.error('Login failed. Please check your credentials.', { position: toast.POSITION.TOP_LEFT });
+                toast.error('Login failed. Please check your credentials.', { position: toast.POSITION.TOP_RIGHT });
             }
 
         } catch (error) {
             console.log(error)
             // Show error toast
-            toast.error('An error occurred. Please try again later.', { position: toast.POSITION.TOP_LEFT });
+            toast.error('An error occurred. Please try again later.', { position: toast.POSITION.TOP_RIGHT });
         }
     }
 

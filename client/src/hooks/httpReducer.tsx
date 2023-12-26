@@ -2,38 +2,39 @@
 export const INITIAL_STATE = {
     isLoading: false,
     isError: false,
-    data: []
+    data: null
 }
 
 export const ACTION_TYPES = {
-    FECTH_START: "FECTH_START",
-    FECTH_SUCCESS: "FECTH_SUCCESS",
-    FECTH_ERROR: "FECTH_ERROR"
+    ACTION_START: "ACTION_START",
+    ACTION_SUCCESS: "ACTION_SUCCESS",
+    ACTION_ERROR: "ACTION_ERROR"
 }
 
 export const dataReducer = (state: any, action: any) => {
     switch (action.type) {
-        case ACTION_TYPES.FECTH_START:
+        case ACTION_TYPES.ACTION_START:
             return {
                 isLoading: true,
                 isError: false,
-                data: []
+                data: null
             };
-        case ACTION_TYPES.FECTH_SUCCESS:
+        case ACTION_TYPES.ACTION_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 data: action.payload
             };
-        case ACTION_TYPES.FECTH_ERROR:
+        case ACTION_TYPES.ACTION_ERROR:
             return {
                 isLoading: false,
                 isError: true,
-                data: []
+                data: null
             };
         default:
             return state
     }
 }
+
 
 
