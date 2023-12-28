@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto&display=swap');
 
 :root {
-  --bleu-fonce: #023047;
-  --bleu-ciel: #a2d2ff;
+  --bleu-fonce: #024769; 
+  --bleu-fonce-hover: #023047;
+  --bleu-ciel: #caf0f8;
   --gris-fonce: #adb5bd;
   --gris-ciel: #e9ecef;
   --rouge: #ff595e;

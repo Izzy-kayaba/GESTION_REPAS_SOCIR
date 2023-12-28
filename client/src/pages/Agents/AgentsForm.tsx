@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Alert } from 'react-bootstrap';
 import female from "../../assets/female.jpg"
 import male from "../../assets/male.jpg"
-import styles from "../../elements/Form/Form.module.css";
+import style from "../../elements/Form/Form.module.css";
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import useFetch from "../../hooks/useFetch";
 import FormTemplate from "../../elements/Form/FormTemplate";
 import usePost from "../../hooks/usePost";
 import useUpdate from "../../hooks/useUpdate";
-import style from "./Agents.module.css"
 
 type AgentType = {
     id_agent: string,
@@ -86,7 +85,7 @@ const AgentsForm: React.FC = () => {
     return (
         <>
             <div className="d-flex justify-content-between px-2">
-                <Button variant="primary">
+                <Button className={style.bouton}>
                     Annuler
                 </Button>
 
@@ -96,38 +95,40 @@ const AgentsForm: React.FC = () => {
             </div>
             <FormTemplate>
                 <Form onSubmit={handleSubmit}>
-                    <div className={`row ${styles.row}`}>
+                    <div className={`row ${style.row}`}>
                         <h5 className="fw-bold">MATRICULE ET PHOTO</h5>
-                        <div className='col-6'>
-                            <Form.Label>Matricule</Form.Label >
+                        <div className='col-12 col-md-6'>
+                            <Form.Label>MATRICULE</Form.Label >
                             <Form.Control
                                 type="text"
                                 name="matr_agent"
                                 value={formData?.matr_agent}
                                 onChange={handleChange}
-                                className="my-0"
+                                className={style.formControl}
                             />
                             <Form.Control.Feedback type="invalid">
                             </Form.Control.Feedback>
                         </div>
 
-                        <div className='col-6'>
+                        <div className='col-12 col-md-6'>
                             <Form.Group controlId="image">
-                                <img
-                                    src={formData?.sexe === "M" ? male : female}
-                                    alt={`image ${formData?.sexe}`}
-                                    className={style.avatar}
-                                />
+                                <div className="d-flex justify-content-center px-5">
+                                    <img
+                                        src={formData?.sexe === "M" ? male : female}
+                                        alt={`image ${formData?.sexe}`}
+                                        className={style.avatar}
+                                    />
+                                </div>
                                 <Form.Control.Feedback type="invalid" />
                             </Form.Group>
                         </div>
                     </div>
 
-                    <div className={`row ${styles.row}`}>
+                    <div className={`row ${style.row}`}>
                         <h5 className="fw-bold">COORDONNÉES PERSONNELLES</h5>
-                        <div className="col-6">
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="nom_agent">
-                                <Form.Label>Nom</Form.Label>
+                                <Form.Label>NOM</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="nom_agent"
@@ -141,9 +142,9 @@ const AgentsForm: React.FC = () => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="postnom_agent">
-                                <Form.Label>Postnom</Form.Label>
+                                <Form.Label>POSTNOM</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="postnom_agent"
@@ -155,10 +156,11 @@ const AgentsForm: React.FC = () => {
                                 <Form.Control.Feedback type="invalid">
                                     {/* {formErrors.postnom_agent} */}
                                 </Form.Control.Feedback>
-                            </Form.Group></div>
-                        <div className="col-6">
+                            </Form.Group>
+                        </div>
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="prenom_agent">
-                                <Form.Label>Prénom</Form.Label>
+                                <Form.Label>PRENOM</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="prenom_agent"
@@ -172,8 +174,8 @@ const AgentsForm: React.FC = () => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
-                        <div className="col-6">
-                            <Form.Label>Genre</Form.Label>
+                        <div className="col-12 col-md-6">
+                            <Form.Label>GENRE</Form.Label>
                             <Form.Control
                                 as="select"
                                 name="sexe"
@@ -192,11 +194,11 @@ const AgentsForm: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={`row ${styles.row}`}>
+                    <div className={`row ${style.row}`}>
                         <h5 className="fw-bold">COORDONNÉES DE CONTACT</h5>
-                        <div className="col-6">
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="contact">
-                                <Form.Label>Contact</Form.Label>
+                                <Form.Label>NUMERO DE TEL.</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="contact"
@@ -210,9 +212,9 @@ const AgentsForm: React.FC = () => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="email_agent">
-                                <Form.Label>Email</Form.Label>
+                                <Form.Label>ADRESSE E-MAIL</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="email_agent"
@@ -228,11 +230,11 @@ const AgentsForm: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={`row ${styles.row}`}>
+                    <div className={`row ${style.row}`}>
                         <h5 className="fw-bold">INFORMATIONS DE NAISSANCE ET DE RÉSIDENCE</h5>
-                        <div className="col-6">
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="lieu_naiss">
-                                <Form.Label>Lieu de Naissance</Form.Label>
+                                <Form.Label>LIEU DE NAISSANCE</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="lieu_naiss"
@@ -246,9 +248,9 @@ const AgentsForm: React.FC = () => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-md-6">
                             <Form.Group controlId="date_naiss">
-                                <Form.Label>Date de Naissance</Form.Label>
+                                <Form.Label>DATE DE NAISSANCE</Form.Label>
                                 <Form.Control
                                     type="date"
                                     name="date_naiss"
