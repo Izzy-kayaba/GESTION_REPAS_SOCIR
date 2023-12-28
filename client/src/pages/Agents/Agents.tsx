@@ -26,10 +26,10 @@ const Agents: React.FC = () => {
 
   const tableColumns = [
     { title: 'Matricule', dataKey: 'matr_agent' },
-    { title: 'Prenom', dataKey: 'prenom_agent' },
     { title: 'Nom', dataKey: 'nom_agent' },
+    { title: 'PostNom', dataKey: 'postnom_agent' },
+    { title: 'Prenom', dataKey: 'prenom_agent' },
     { title: 'Sexe', dataKey: 'sexe' },
-    { title: 'Date de Naissance', dataKey: 'date_naiss' },
     { title: 'Tel', dataKey: 'contact' },
     { title: 'Email', dataKey: 'email_agent' }
   ];
@@ -38,7 +38,9 @@ const Agents: React.FC = () => {
   const [isChildChecked, setIsChildChecked] = useState(false);
 
   // State hooks to store the data
-  let agents: any = useFetch({ endpoint: "api/agents" });
+  const agents: any = useFetch({ endpoint: "api/agents" });
+  const fonctions: any = useFetch({ endpoint: "api/fonctions" });
+
   const [sortedAgents, setSortedAgents] = useState<Agent[]>([]); // Liste triée des agents
   const [searchTerm, setSearchTerm] = useState<string>(''); // Terme de recherche
 
@@ -60,11 +62,9 @@ const Agents: React.FC = () => {
     agent.nom_agent.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
   // Rendu du composant
   return (
     <>
-
       {!isChildChecked ?
         <div className="d-flex justify-content-between p-2">
           <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2">

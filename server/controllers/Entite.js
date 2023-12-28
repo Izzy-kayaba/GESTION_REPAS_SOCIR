@@ -1,13 +1,13 @@
 const { pool } = require("../config/dbConfig");
 
 // Route to fetch data from the 'agents' table
-const getCondiments = async (req, res) => {
+const getEntites = async (req, res) => {
     pool.connect()
         .then(client => {
-            return client.query('SELECT * FROM condiments')
+            return client.query('SELECT * FROM entites')
                 .then(result => {
-                    const condiments = result.rows;
-                    res.json(condiments);
+                    const entites = result.rows;
+                    res.json(entites);
                 })
                 .catch(err => {
                     console.error('Error executing query', err);
@@ -22,5 +22,5 @@ const getCondiments = async (req, res) => {
 };
 
 module.exports = {
-    getCondiments
+    getEntites
 }

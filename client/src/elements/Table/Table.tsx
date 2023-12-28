@@ -79,7 +79,6 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
-
   return (
     <div>
       {/* React Bootstrap Table component */}
@@ -104,9 +103,7 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
               {columns.map((column, colIndex) => (
                 <td key={colIndex} style={tdStyle}>
                   <Link to={`./${row?.id_agent}`} className="nav-link">
-                    {isDate(row[column.dataKey])
-                      ? moment(row[column.dataKey]).format('Do MMMM YYYY')
-                      : row[column.dataKey]}
+                    {row[column.dataKey]}
                   </Link>
                 </td>
               ))}

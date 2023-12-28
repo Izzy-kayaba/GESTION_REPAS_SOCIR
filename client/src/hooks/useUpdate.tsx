@@ -25,12 +25,12 @@ const useUpdate = ({ endpoint }: Props) => {
                 const responseData = await response.json();
                 dispatch({ type: ACTION_TYPES.ACTION_SUCCESS, payload: responseData });
                 // Show success toast
-                toast.success('Ajouter avec succes !!', { position: toast.POSITION.TOP_RIGHT });
+                toast.success('Modifiez avec succes !', { position: toast.POSITION.TOP_RIGHT });
                 console.log('Data updated successfully !');
             } else {
                 dispatch({ type: ACTION_TYPES.ACTION_ERROR });
                 // Show error toast
-                toast.error("Une erreur s'est produite ! ", { position: toast.POSITION.TOP_RIGHT });
+                toast.error("Une erreur s'est produite !", { position: toast.POSITION.TOP_RIGHT });
                 console.error('Failed to update data:', response.statusText);
             }
         } catch (error) {

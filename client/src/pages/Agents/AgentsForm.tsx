@@ -69,7 +69,7 @@ const AgentsForm: React.FC = () => {
         e.preventDefault();
 
         if (formData?.id_agent === undefined) {
-            //If there is no presence of ID, c
+            //If there is no presence of ID
             httpPost(formData)
                 .then(() => {
                     setFormData(initial_state);
@@ -277,7 +277,7 @@ const AgentsForm: React.FC = () => {
                     <div className="text-center">
                         {/* Submit Button */}
                         <Button variant="primary" type="submit">
-                            Ajouter
+                            { router?.id ? <> Modifier</> : <>Ajouter</>}
                         </Button>
                     </div>
                 </Form>

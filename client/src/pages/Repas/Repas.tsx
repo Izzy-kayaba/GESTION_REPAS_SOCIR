@@ -10,7 +10,6 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
     moment.locale("fr"); // Translate the date in french
 
     const todayFormatted = moment().format('Do MMMM YYYY');  // Get today's date in the same format as 'date_cree'
-
     const { data: repasAgents, isLoading, isError }: any = useFetch({ endpoint: "api/repas-agents" });
 
     // Fetch data from related tables (agents, condiments, accompagnements, aliments)

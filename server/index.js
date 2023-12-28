@@ -12,9 +12,14 @@ const port = process.env.PORT || 1100;
 
 const authRoutes = require("./routes/Auth")
 const userRoutes = require("./routes/Users")
+const repasRoutes = require("./routes/Repas")
+const toursRoutes = require("./routes/Tours")
 const agentRoutes = require("./routes/Agents")
+const entitesRoutes = require("./routes/Entites")
 const alimentRoutes = require("./routes/Aliments")
+const fonctionsRoutes = require("./routes/Fonctions")
 const condimentRoutes = require("./routes/Condiments")
+const departementsRoutes = require("./routes/Departements")
 const accompagnementRoutes = require("./routes/Accompagnements")
 
 // Middlewares
@@ -48,9 +53,14 @@ app.get('/', (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/repas", repasRoutes);
+app.use("/api/tours", toursRoutes);
 app.use("/api/agents", agentRoutes);
-app.use("/api/aliments", alimentRoutes); 
+app.use("/api/entites", entitesRoutes);
+app.use("/api/aliments", alimentRoutes);
+app.use("/api/fonctions", fonctionsRoutes);
 app.use("/api/condiments", condimentRoutes);
+app.use("/api/departements", departementsRoutes);
 app.use("/api/accompagnements", accompagnementRoutes);
 
 // Route to fetch data from the 'agents' table
@@ -60,7 +70,7 @@ app.get('/api/repas-agents', async (req, res) => {
     const result = await client.query('SELECT * FROM repas_agents WHERE date_efface IS NULL');
     const agents = result.rows;
     res.json(agents);
-    client.release(); 
+    client.release();
   } catch (err) {
     console.error('Error executing query', err);
     res.status(500).send('Internal Server Error');
