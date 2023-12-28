@@ -102,7 +102,8 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
             <tr key={rowIndex} role='button'>
               {columns.map((column, colIndex) => (
                 <td key={colIndex} style={tdStyle}>
-                  <Link to={`./${row?.id_agent}`} className="nav-link">
+                  <Link to={`./${Object.values(row)[0]}`} className="nav-link">
+                    {/* This is navigating to the first property of the object */}
                     {row[column.dataKey]}
                   </Link>
                 </td>
