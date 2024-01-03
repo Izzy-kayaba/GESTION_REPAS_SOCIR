@@ -14,6 +14,9 @@ type AgentType = {
     matr_agent: string,
     nom_agent: string,
     postnom_agent: string,
+    id_dep: number,
+    id_fonction: number,
+    id_entite: number,
     prenom_agent: string,
     sexe: 'M' | 'F';
     contact: string;
@@ -28,6 +31,9 @@ const initial_state: AgentType = {
     nom_agent: "",
     postnom_agent: "",
     prenom_agent: "",
+    id_dep: 1,
+    id_entite: 1,
+    id_fonction: 1,
     sexe: "M",
     contact: "",
     email_agent: "",
@@ -36,12 +42,23 @@ const initial_state: AgentType = {
 }
 
 const AgentsForm: React.FC = () => {
-    const router = useParams();
-    const route = useNavigate();
-    const agent: any = useFetch({ endpoint: `api/agents/${router?.id}` });
+
+    // Destructure id from the URL parameters
+    const { id } = useParams();
+
+    // A more descriptive name for navigation functionality
+    const navigation = useNavigate();
+    const [url, setUrl] = useState("api/agents");
     const [formData, setFormData] = useState<AgentType>(initial_state);
 
-    const [url, setUrl] = useState("api/agents");
+    // Conditionally create the API endpoint based on whether id is defined
+    const apiEndpoint = id ? `api/agents/${id}` : undefined;
+    const agent: any = useFetch({ endpoint: apiEndpoint });
+
+    // Other api calls for select options
+    const entites: any = useFetch({ endpoint: "api/entites" });
+    const departements: any = useFetch({ endpoint: "api/departements" });
+    const fonctions: any = useFetch({ endpoint: "api/fonctions" });
 
     const handleChange = (e: React.ChangeEvent<any>) => {
         const { name, value } = e.target;
@@ -51,37 +68,41 @@ const AgentsForm: React.FC = () => {
         }));
     };
 
-    const resetForm = () => {
-        setFormData(initial_state);
-    };
-
     useEffect(() => {
-        if (agent.data?.agents?.length > 0) {
-            setFormData(agent.data?.agents[0]);
-            setUrl(`api/agents/${router?.id}`)
+        if (id) {
+            setUrl(`api/agents/${id}`)
+            setFormData(agent?.data?.agents[0]);
         }
+
     }, [agent]);
 
     const { httpPost } = usePost({ endpoint: url });
     const { httpPut } = useUpdate({ endpoint: url });
 
+    const resetForm = () => {
+        setFormData(initial_state);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (formData?.id_agent === undefined) {
+        // Validate the form before submission
+
+        if (id) {
+            httpPut(formData)
+                .then(() => {
+                    setFormData(initial_state);
+                    navigation("../agents")
+                })
+        } else {
             //If there is no presence of ID
             httpPost(formData)
                 .then(() => {
                     setFormData(initial_state);
                 })
-        } else {
-            httpPut(formData)
-                .then(() => {
-                    setFormData(initial_state);
-                    route("../agents")
-                })
         }
     };
+
     return (
         <>
             <div className="d-flex justify-content-between px-2">
@@ -119,7 +140,8 @@ const AgentsForm: React.FC = () => {
                                         className={style.avatar}
                                     />
                                 </div>
-                                <Form.Control.Feedback type="invalid" />
+                                <Form.Control.Feedback type="invalid">
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </div>
                     </div>
@@ -170,7 +192,7 @@ const AgentsForm: React.FC = () => {
                                     className="my-0"
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.prenom_agent} */}
+                                    {/* {formErrors.prenom_agent */}
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
@@ -210,6 +232,44 @@ const AgentsForm: React.FC = () => {
                                 <Form.Control.Feedback type="invalid">
                                     {/* {formErrors.contact} */}
                                 </Form.Control.Feedback>
+                            </Form.Group>
+                        </div>
+                        <div className="col-12 col-md-6">
+                            <Form.Group controlId="email_agent">
+                                <Form.Label>ADRESSE E-MAIL</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="email_agent"
+                                    value={formData?.email_agent}
+                                    onChange={handleChange}
+                                    // isInvalid={!!formErrors.email_agent}
+                                    className="my-0"
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {/* {formErrors.email_agent} */}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </div>
+                    </div>
+
+                    <div className={`row ${style.row}`}>
+                        <h5 className="fw-bold">FONCTIONALITES</h5>
+                        <div className="col-12 col-md-6">
+                            <Form.Group controlId="id_fonction">
+                                <Form.Label>Fonction</Form.Label>
+                                <Form.Select aria-label="Default select example"
+                                    name="id_fonction"
+                                    defaultValue={formData?.id_fonction}
+                                    onChange={handleChange}>
+                                    <option >Open this select menu</option>
+                                    {fonctions?.data?.map((fonction: any) =>
+                                    (
+                                        <option key={fonction?.id_fonction}
+                                            value={parseInt(fonction?.id_fonction)}>
+                                            {fonction?.nom_fonction}
+                                        </option>
+                                    ))}
+                                </Form.Select>
                             </Form.Group>
                         </div>
                         <div className="col-12 col-md-6">
@@ -277,7 +337,7 @@ const AgentsForm: React.FC = () => {
                     <div className="text-center">
                         {/* Submit Button */}
                         <Button variant="primary" type="submit">
-                            { router?.id ? <> Modifier</> : <>Ajouter</>}
+                            {id ? <> Modifier</> : <>Ajouter</>}
                         </Button>
                     </div>
                 </Form>

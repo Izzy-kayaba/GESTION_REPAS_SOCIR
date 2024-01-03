@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Form, FormControl, Button } from 'react-bootstrap';
+import { Form, FormControl } from 'react-bootstrap';
 import ModalTemplate from '../../elements/Modal/Modal';
 import Loader from '../../elements/Loader/Loader';
-import FormTemplate from '../../elements/Form/FormTemplate';
 import useFetch from '../../hooks/useFetch';
 import CustomTable from '../../elements/Table/Table';
 import { NavLink } from 'react-router-dom';
-import AgentsForm from './AgentsForm';
 
 type Agent = {
   id_agent?: number;
@@ -31,25 +29,42 @@ const Agents: React.FC = () => {
     { title: 'Prenom', dataKey: 'prenom_agent' },
     { title: 'Sexe', dataKey: 'sexe' },
     { title: 'Tel', dataKey: 'contact' },
-    { title: 'Email', dataKey: 'email_agent' }
+    { title: 'Email', dataKey: 'email_agent' },
+    { title: 'Fonction', dataKey: 'agent_fonction' },
+    { title: 'Entite', dataKey: 'agent_entite' },
+    { title: 'Departement', dataKey: 'agent_departement' },
+    { title: 'Tour', dataKey: 'agent_tour' },
   ];
 
-  // State in the parent to hold the boolean value
-  const [isChildChecked, setIsChildChecked] = useState(false);
+  // Use state to manage the human-readable data
+  // Utiliser l'état pour gérer les données lisibles par les utilisateurs
 
-  // State hooks to store the data
-  const agents: any = useFetch({ endpoint: "api/agents" });
-  const fonctions: any = useFetch({ endpoint: "api/fonctions" });
-
-  const [sortedAgents, setSortedAgents] = useState<Agent[]>([]); // Liste triée des agents
+  const [displayData, setDisplayData] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>(''); // Terme de recherche
 
+  // State hooks to store the data
+  const { data: agents, isLoading, isError }: any = useFetch({ endpoint: "api/agents" });
+
+  // Other api calls for select options
+  const { data: tours }: any = useFetch({ endpoint: "api/tours" });
+  const { data: entites }: any = useFetch({ endpoint: "api/entites" });
+  const { data: fonctions }: any = useFetch({ endpoint: "api/fonctions" });
+  const { data: departements }: any = useFetch({ endpoint: "api/departements" });
 
   useEffect(() => {
-    if (agents && agents.data) {
-      setSortedAgents(agents.data);
+    // Combine data from repas_agents with related tables
+    if (agents && entites && departements && fonctions && tours) {
+
+      const processedData = agents.map((agent: any) => ({
+        ...agent,
+        agent_tour: tours.find((tour: any) => tour.id_tour === agent.id_tour)?.nom_tour,
+        agent_entite: entites.find((entite: any) => entite.id_entite === agent.id_entite)?.nom_entite,
+        agent_departement: departements.find((departement: any) => departement.id_dep === agent.id_dep)?.nom_dep,
+        agent_fonction: fonctions.find((fonction: any) => fonction.id_fonction === agent.id_fonction)?.nom_fonction,
+      }));
+      setDisplayData(processedData);
     }
-  }, [agents]);
+  }, [agents, entites, departements, fonctions, tours]);
 
   // Fonction pour gérer la recherche
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,40 +73,37 @@ const Agents: React.FC = () => {
   };
 
   // Filtrage des agents en fonction du terme de recherche
-  const filteredAgents = sortedAgents?.filter((agent) =>
+  const filteredAgents = displayData?.filter((agent) =>
     agent.nom_agent.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Rendu du composant
   return (
     <>
-      {!isChildChecked ?
-        <div className="d-flex justify-content-between p-2">
-          <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2">
-            Precedent
-          </NavLink>
+      <div className="d-flex justify-content-between p-2">
+        <NavLink to={"../"} className="nav-link d-inline border border-1 rounded-2 p-2">
+          Precedent
+        </NavLink>
 
-          <Button variant="primary" onClick={() => setIsChildChecked(!isChildChecked)}>
-            Nouveau agent
-          </Button>
-        </div>
-        : null}
-
-      {isChildChecked ?
-        <AgentsForm />
-        :
-        <div className="p-2">
-          {/* Formulaire de recherche */}
-          <Form>
-            <FormControl
-              type="text"
-              placeholder="Rechercher agent par nom"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </Form>
-          <CustomTable columns={tableColumns} data={filteredAgents} rowsPerPage={10} />
-        </div>
+        <NavLink to={"./formulaire"} className="nav-link d-inline border border-1 rounded-2 p-2">
+          Nouveau agent
+        </NavLink>
+      </div>
+      {
+        isLoading ?
+          <Loader /> :
+          <div className="p-2">
+            {/* Formulaire de recherche */}
+            <Form>
+              <FormControl
+                type="text"
+                placeholder="Rechercher agent par nom"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </Form>
+            <CustomTable columns={tableColumns} data={filteredAgents} rowsPerPage={10} isLink={true} />
+          </div>
       }
     </>
   );

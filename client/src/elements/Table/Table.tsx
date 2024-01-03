@@ -13,32 +13,14 @@ interface TableProps {
   columns: TableColumn[];
   data: any[];
   rowsPerPage: number;
+  isLink? : Boolean;
 }
 
-const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
+const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink }) => {
 
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [isChecked, setIsChecked] = useState(false);
-
-  // Function to handle sorting
-  const handleSort = (field: string) => {
-    // Toggle sorting order if the same column is clicked
-    const order = field === sortedColumn && sortOrder === 'asc' ? 'desc' : 'asc';
-
-    // Copie triée de la liste complète des données
-    const sorted = [...data].sort((a, b) => {
-      const aValue = a[field] ?? '';
-      const bValue = b[field] ?? '';
-
-      return order === 'asc' ? (aValue > bValue ? 1 : -1) : aValue < bValue ? 1 : -1;
-    });
-
-    setSortedColumn(field);
-    setSortOrder(order);
-    // Update state with the sorted data
-    // Here, you might want to implement pagination logic if needed
-  };
+ 
 
   // State to manage the current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,6 +52,25 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
     return moment(value, moment.ISO_8601, true).isValid();
   };
 
+  // Function to handle sorting
+  const handleSort = (field: string) => {
+    // Toggle sorting order if the same column is clicked
+    const order = field === sortedColumn && sortOrder === 'asc' ? 'desc' : 'asc';
+
+    // Copie triée de la liste complète des données
+    const sorted = [...data].sort((a, b) => {
+      const aValue = a[field] ?? '';
+      const bValue = b[field] ?? '';
+
+      return order === 'asc' ? (aValue > bValue ? 1 : -1) : aValue < bValue ? 1 : -1;
+    });
+
+    setSortedColumn(field);
+    setSortOrder(order);
+    // Update state with the sorted data
+    // Here, you might want to implement pagination logic if needed
+  };
+
   // Function to handle pagination
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -82,7 +83,7 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
   return (
     <div>
       {/* React Bootstrap Table component */}
-      <Table striped bordered hover>
+      <Table bordered hover>
         <thead>
           <tr>
             {/* Map through columns and create th elements */}
@@ -102,8 +103,9 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage }) => {
             <tr key={rowIndex} role='button'>
               {columns.map((column, colIndex) => (
                 <td key={colIndex} style={tdStyle}>
-                  <Link to={`./${Object.values(row)[0]}`} className="nav-link">
-                    {/* This is navigating to the first property of the object */}
+                  {/* This is navigating to the first property of the object */}
+                  <Link to={isLink ? `./${Object.values(row)[0]}` : `./`}
+                    className="nav-link">
                     {row[column.dataKey]}
                   </Link>
                 </td>

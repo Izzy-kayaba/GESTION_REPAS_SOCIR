@@ -150,7 +150,7 @@ const updateAgent = async (req, res) => {
             res.status(404).json({ error: 'Agent not found' });
         } else {
             const newAgent = result.rows[0];
-            res.json({ message: 'Agent updated successfully', data: { newAgent }});
+            res.json({ message: 'Agent updated successfully', data: { newAgent } });
         }
 
         client.release();

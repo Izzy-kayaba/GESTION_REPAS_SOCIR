@@ -4,6 +4,8 @@ import { useUserContext } from '../../helpers/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import usePost from '../../hooks/usePost';
+import Loader from '../../elements/Loader/Loader';
 
 type formType = {
     email_utilisateur: string,
@@ -30,49 +32,30 @@ function Login() {
     };
 
     const [formValues, setFormValues] = useState<formType>(initialState);
+    const {
+        state: { data, isLoading, isError },
+        httpPost
+    } = usePost({ endpoint: "auth/login" });
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch('http://localhost:1100/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formValues),
-            });
+        httpPost(formValues)
+            .then(() => {
+                if (data !== null) {
+                    // Save user details to session storage
+                    sessionStorage.setItem('userDetails', JSON.stringify(data?.userWithoutPassword));
+                    // Update user context value using setUserProfile
+                    setUserProfile(data?.userWithoutPassword);
 
-            if (response.ok) {
-                // Successful submission
-                console.log('Logged in successfully!');
-                const data = await response.json();
+                    // Redirect to the specified URL
+                    router(data.redirectUrl);
+                }
 
-                // Save user details to session storage
-                sessionStorage.setItem('userDetails', JSON.stringify(data?.userWithoutPassword));
-
-                // Update user context value using setUserProfile
-                setUserProfile(data?.userWithoutPassword);
-
-                // Show success toast
-                toast.success('Logged in successfully!', { position: toast.POSITION.TOP_RIGHT });
-
-                // Redirect to the specified URL
-                router(data.redirectUrl);
-            }
-            else {
-                console.log("Error", response);
-                // Show error toast
-                toast.error('Login failed. Please check your credentials.', { position: toast.POSITION.TOP_RIGHT });
-            }
-
-        } catch (error) {
-            console.log(error)
-            // Show error toast
-            toast.error('An error occurred. Please try again later.', { position: toast.POSITION.TOP_RIGHT });
-        }
+            }).catch((err) => {
+                console.error(err)
+            })
     }
-
 
     return (
         <div className={style.cover}>

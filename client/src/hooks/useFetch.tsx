@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { ACTION_TYPES, INITIAL_STATE, dataReducer } from './httpReducer';
 
 type Props = {
-    endpoint: string;
+    endpoint: string | undefined;
 }
 
 const useFetch: React.FC<Props> = ({ endpoint }: Props) => {
@@ -11,18 +11,21 @@ const useFetch: React.FC<Props> = ({ endpoint }: Props) => {
     useEffect(() => {
         const fetchData = async () => {
             dispatch({ type: ACTION_TYPES.ACTION_START });
-            try {
-                const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/${endpoint}`);
+            
+            if (endpoint !== undefined) {
+                try {
+                    const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/${endpoint}`);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    dispatch({ type: ACTION_TYPES.ACTION_SUCCESS, payload: data });
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    dispatch({ type: ACTION_TYPES.ACTION_ERROR });
                 }
-                const data = await response.json();
-
-                dispatch({ type: ACTION_TYPES.ACTION_SUCCESS, payload: data });
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                dispatch({ type: ACTION_TYPES.ACTION_ERROR });
             }
         };
 

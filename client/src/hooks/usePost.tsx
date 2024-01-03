@@ -32,7 +32,7 @@ const usePost = ({ endpoint }: Props) => {
                 dispatch({ type: ACTION_TYPES.ACTION_ERROR });
                 // Show error toast
                 toast.error("Une erreur s'est produite ! ", { position: toast.POSITION.TOP_RIGHT });
-                console.error('Failed to add new data:', response.statusText);
+                console.error('Failed to create new data:', response.statusText);
             }
         } catch (error) {
             dispatch({ type: ACTION_TYPES.ACTION_ERROR });

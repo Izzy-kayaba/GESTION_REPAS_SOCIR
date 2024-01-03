@@ -16,6 +16,7 @@ const SettingsRoutes = () => {
                     <Route key="profile" path="profile" element={<Profile />} />,
                     <Route key="agents" path="agents" element={<Agents />} />,
                     <Route key="agents" path="agents/:id" element={<AgentsForm />} />,
+                    <Route key="agents" path="agents/formulaire" element={<AgentsForm />} />,
                     <Route key="not-found" path="*" element={<Navigate to="/admin/configuration" />} />,
                 ]}
             </Routes>

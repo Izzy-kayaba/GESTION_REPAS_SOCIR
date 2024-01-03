@@ -1,77 +1,135 @@
-import moment from 'moment';
-import 'moment/locale/fr'; // Import French locale
 import React, { useEffect, useState } from 'react';
-import useFetch from '../../hooks/useFetch';
-import CustomTable from '../../elements/Table/Table';
+import Table from "../../elements/Table/Table";
+import { Card } from 'react-bootstrap';
 
-const AdminAudit: React.FC = () => { // Fetch data from the repas_agents table
-
-    moment.locale("fr"); // Translate the date in french
-    const todayFormatted = moment().format('Do MMMM YYYY');  // Get today's date in the same format as 'date_cree'
+const AdminAudit: React.FC = () => {
 
     const tableColumns = [
-        { title: 'MAT', dataKey: 'matr_agent' },
-        { title: 'Agent', dataKey: 'nom_agent' },
-        { title: 'Entite', dataKey: 'agent_entite' },
-        { title: 'Condiment', dataKey: 'nom_condiment' },
-        { title: 'Accompagnement', dataKey: 'nom_accompagnement' },
-        { title: 'Aliment', dataKey: 'nom_aliment' },
+        { title: 'Matricule', dataKey: 'matr_agent' },
+        { title: 'Agent', dataKey: 'id_agent' },
+        { title: 'Entite', dataKey: 'id_entite' },
+        { title: 'Departement', dataKey: 'id_dep' },
+        { title: 'Tour', dataKey: 'id_tour' },
+        { title: 'Condiment', dataKey: 'id_condiment' },
+        { title: 'Accompagnement', dataKey: 'id_accompagnement' },
+        { title: 'Aliment', dataKey: 'id_aliment' },
         { title: 'Prix', dataKey: 'prix' },
-        { title: 'Date Créé', dataKey: 'date_cree' },
-        { title: 'Commentaires', dataKey: 'commentaires' },
+        { title: 'Jour Du Repas', dataKey: 'date_cree' },
+        { title: 'Commentaire', dataKey: 'commentaires' }
     ];
 
-
-
-    const { data: repasAgents, isLoading, isError }: any = useFetch({ endpoint: "api/repas-agents" });
-
-    // Fetch data from related tables (agents, condiments, accompagnements, aliments)
-    const{data : agents}: any = useFetch({ endpoint: "api/agents" });
-    const { data: condiments }: any = useFetch({ endpoint: "api/condiments" });
-    const { data: accompagnements }: any = useFetch({ endpoint: "api/accompagnements" });
-    const { data: aliments }: any = useFetch({ endpoint: "api/aliments" });
-
-    console.log(condiments)
-    // Use state to manage the human-readable data
+    // Utiliser l'état pour gérer les données lisibles par les utilisateurs
     const [displayData, setDisplayData] = useState<any[]>([]);
-    // Filter data where 'date_cree' is equal to today
-    const filteredData = displayData.filter((row) => moment(row.date_cree).format('Do MMMM YYYY') === todayFormatted);
-
-
+    const [filterBy, setFilterby] = useState<any>("")
 
     useEffect(() => {
-        // Combine data from repas_agents with related tables
-        if (repasAgents && agents && condiments && accompagnements && aliments) {
-            const processedData = repasAgents.map((repasAgent: any) => ({
-                ...repasAgent,
-                matr_agent: agents.find((agent: any) => agent.id_agent === repasAgent.id_agent)?.matr_agent,
-                nom_agent: agents.find((agent: any) => agent.id_agent === repasAgent.id_agent)?.nom_agent,
-                agent_entite: agents.find((agent: any) => agent.id_agent === repasAgent.id_agent)?.id_entite,
-                agent_departement: agents.find((agent: any) => agent.id_agent === repasAgent.id_agent)?.id_dep,
-                nom_condiment: condiments.find((condiment: any) => condiment.id_condiment === repasAgent.id_condiment)?.nom_condiment,
-                nom_accompagnement: accompagnements.find((acc: any) => acc.id_accompagnement === repasAgent.id_accompagnement)?.nom_accompagnement,
-                nom_aliment: aliments.find((aliment: any) => aliment.id_aliment === repasAgent.id_aliment)?.nom_aliment,
-            }));
+        const zuaData = async () => {
+            try {
+                var data = await fetch("http://localhost:1100/api/repas-agents");
+                var dataYagents = await fetch("http://localhost:1100/api/agents");
+                var dataYaCondiments = await fetch("http://localhost:1100/api/condiments");
 
-            setDisplayData(processedData);
+                if (!data.ok) {
+                    throw new Error(`HTTP error! Status: ${data.status}`);
+                }
+                const agentsConvertis = await dataYagents.json();
+                const condimentsConvertis = await dataYaCondiments.json();
+                const dataConvertis = await data.json();
+
+                const dataCombine = dataConvertis.map((dataConverti: any) => ({
+                    ...dataConverti,
+                    matr_agent: agentsConvertis.find((agent: any) => agent.id_agent == dataConverti.id_agent)?.matr_agent,
+                    id_agent: agentsConvertis.find((agent: any) => agent.id_agent == dataConverti.id_agent)?.nom_agent,
+                    id_condiment: condimentsConvertis.find((condiment: any) => condiment.id_condiment == dataConverti.id_condiment)?.nom_condiment
+                }))
+
+                setDisplayData(dataCombine)
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
 
-    }, [repasAgents, agents, condiments, accompagnements, aliments]);
+        zuaData();
+    }, [])
 
+    console.log("filterBy", filterBy)
 
-    if (isLoading) {
-        return <p>Loading...</p>;
-    }
+    const dataFiltered = displayData?.filter((data) =>
+        data["matr_agent"] == 4456
+    )
 
-    if (isError) {
-        return <p>Error fetching data</p>;
-    }
+    console.log(dataFiltered)
+
 
     return (
         <div>
-            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10} />
-        </div>
-    );
-};
+            {/* <div>
+                <label htmlFor="">Trier</label>
+                <select name="" id="">
+                    <option value="">Par entite</option>
+                    <option value="">Par entite</option>
+                </select>
+            </div>
 
-export default AdminAudit;
+            <div className="d-flex align-items-center">
+                <div>
+                    <label htmlFor="">Filter par : </label>
+                    <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                        {tableColumns.map((table, index) =>
+                            <option value={table.title} key={index}>{table.title}</option>
+                        )}
+                    </select>
+                </div>
+                <div>
+                    <input type="text" placeholder={filterBy} />
+                </div>
+            </div> */}
+
+            <Card className="m-1 p-2">
+                <div className="row">
+                    <div className="col">
+                        <label htmlFor="">Matricule</label>
+                        <input type="text" placeholder='Matricule' />
+                    </div>
+                    <div className="col">
+                        <label htmlFor="">Agent</label>
+                        <input type="text" placeholder='Agent' />
+                    </div>
+                    <div className="col">
+                        <label htmlFor="">Aliment</label>
+                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                            {tableColumns.map((table, index) =>
+                                <option value={table.title} key={index}>{table.title}</option>
+                            )}
+                        </select>
+                    </div>
+                    <div className="col">
+                        <label htmlFor="">Accompagnement</label>
+                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                            {tableColumns.map((table, index) =>
+                                <option value={table.title} key={index}>{table.title}</option>
+                            )}
+                        </select>
+                    </div>
+
+                    <div className="col">
+                        <label htmlFor="">Condiment</label>
+                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                            {tableColumns.map((table, index) =>
+                                <option value={table.title} key={index}>{table.title}</option>
+                            )}
+                        </select>
+                    </div>
+                    <div className="col"></div>
+                    <div className="col"></div>
+                </div>
+                Card
+            </Card>
+
+            <Table columns={tableColumns} data={dataFiltered} rowsPerPage={10} isLink={false} />
+        </div>
+    )
+}
+
+export default AdminAudit
