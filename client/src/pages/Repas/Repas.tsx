@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment/locale/fr'; // Import French locale
 import React, { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import CustomTable from '../../elements/Table/Table';
+import CustomTable from '../../components/Table/Table';
 
 
 function RepasAgentsTable() {  // Fetch data from the repas_agents table
@@ -31,10 +31,10 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
         setIsChildChecked(isChecked);
     };
 
-    const handleChildQueries =(a: string, b: string) =>{
+    const handleChildQueries = (a: string, b: string) => {
         // setColum(a)
         // setValue(b)
-      }
+    }
 
     const tableColumns = [
         { title: 'ID', dataKey: 'matr_agent' },
@@ -75,7 +75,7 @@ function RepasAgentsTable() {  // Fetch data from the repas_agents table
 
     return (
         <div>
-            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10}/>
+            <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10} />
         </div>
     );
 };

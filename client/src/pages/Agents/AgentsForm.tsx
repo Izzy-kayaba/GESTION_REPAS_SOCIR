@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Alert } from 'react-bootstrap';
 import female from "../../assets/female.jpg"
 import male from "../../assets/male.jpg"
-import style from "../../elements/Form/Form.module.css";
+import style from "../../components/Form/Form.module.css";
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import useFetch from "../../hooks/useFetch";
-import FormTemplate from "../../elements/Form/FormTemplate";
+import FormTemplate from "../../components/Form/FormTemplate";
 import usePost from "../../hooks/usePost";
 import useUpdate from "../../hooks/useUpdate";
 

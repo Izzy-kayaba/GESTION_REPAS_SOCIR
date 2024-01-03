@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Tableau from '../../elements/Tableau';
+import Tableau from '../../components/Tableau';
 import useFetch from '../../hooks/useFetch';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
@@ -45,17 +45,17 @@ const AdminRepas: React.FC = () => {
                 <Autocomplete
                     multiple
                     id="checkboxes-tags-demo"
-                    options={aliments.data}
+                    options={aliments?.data}
                     disableCloseOnSelect
-                    getOptionLabel={(option: Aliment) => option.nom_aliment}
-                    isOptionEqualToValue={(option, value) => option.nom_aliment === value.nom_aliment}
+                    getOptionLabel={(option: Aliment) => option?.nom_aliment}
+                    isOptionEqualToValue={(option, value) => option?.nom_aliment === value?.nom_aliment}
                     renderOption={(props, option: Aliment, { selected }) => (
                         <li {...props}>
                             <Checkbox
                                 style={{ marginRight: 8 }}
                                 checked={selected}
                             />
-                            {option.nom_aliment}
+                            {option?.nom_aliment}
                         </li>
                     )}
                     style={{ width: '100%' }}
@@ -69,9 +69,9 @@ const AdminRepas: React.FC = () => {
                 <form action="">
 
                     <div>
-                        {selectedAliments.map((item) =>
+                        {selectedAliments?.map((item) =>
                             <>
-                                {item.nom_aliment}
+                                {item?.nom_aliment}
                             </>)}
                     </div>
                 </form>

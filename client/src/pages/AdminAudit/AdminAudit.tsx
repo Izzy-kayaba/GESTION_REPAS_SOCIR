@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Table from "../../elements/Table/Table";
+import Table from "../../components/Table/Table";
 import { Card } from 'react-bootstrap';
+import useFetch from '../../hooks/useFetch';
 
 const AdminAudit: React.FC = () => {
 
@@ -21,6 +22,10 @@ const AdminAudit: React.FC = () => {
     // Utiliser l'état pour gérer les données lisibles par les utilisateurs
     const [displayData, setDisplayData] = useState<any[]>([]);
     const [filterBy, setFilterby] = useState<any>("")
+
+    const data = useFetch({ endpoint: "api/repas-agents" });
+
+    console.log(data)
 
     useEffect(() => {
         const zuaData = async () => {
@@ -64,30 +69,101 @@ const AdminAudit: React.FC = () => {
 
     return (
         <div>
-            {/* <div>
-                <label htmlFor="">Trier</label>
-                <select name="" id="">
-                    <option value="">Par entite</option>
-                    <option value="">Par entite</option>
-                </select>
-            </div>
-
-            <div className="d-flex align-items-center">
-                <div>
-                    <label htmlFor="">Filter par : </label>
-                    <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                        {tableColumns.map((table, index) =>
-                            <option value={table.title} key={index}>{table.title}</option>
-                        )}
-                    </select>
+            <Card className="p-1 mx-1 mb-5">
+                <div className="row mb-2">
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="matr_agent">Matricule</label>
+                            <input type="text" placeholder='matricule' name="matr_agent" className="w-100 px-1" />
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="id_agent">Agent</label>
+                            <input type="text" placeholder='Agent' name="id_agent" className="w-100 px-1" />
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="id_entite">Entite</label>
+                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                                {tableColumns.map((table, index) =>
+                                    <option value={table.title} key={index}>{table.title}</option>
+                                )}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="id_entite">Entite</label>
+                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                                {tableColumns.map((table, index) =>
+                                    <option value={table.title} key={index}>{table.title}</option>
+                                )}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="id_entite">Entite</label>
+                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                                {tableColumns.map((table, index) =>
+                                    <option value={table.title} key={index}>{table.title}</option>
+                                )}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <input type="text" placeholder={filterBy} />
-                </div>
-            </div> */}
 
-            <Card className="m-1 p-2">
-                <div className="row">
+                <div className="row mb-2">
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
+                    <div className="col-2 p-1">
+                        <div className="border border-1 p-2">
+                            <label htmlFor="">Texte</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <div>
+                        <button>Filter</button>
+                    </div>
+                    <div>
+                        <select name="" id="">
+                            <option value="">Optin 1</option>
+                            <option value="">Optin 2</option>
+                        </select>
+                    </div>
+                </div>
+                {/* <div className="row">
                     <div className="col">
                         <label htmlFor="">Matricule</label>
                         <input type="text" placeholder='Matricule' />
@@ -123,8 +199,7 @@ const AdminAudit: React.FC = () => {
                     </div>
                     <div className="col"></div>
                     <div className="col"></div>
-                </div>
-                Card
+                </div> */}
             </Card>
 
             <Table columns={tableColumns} data={dataFiltered} rowsPerPage={10} isLink={false} />

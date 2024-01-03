@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, FormControl } from 'react-bootstrap';
-import ModalTemplate from '../../elements/Modal/Modal';
-import Loader from '../../elements/Loader/Loader';
+import ModalTemplate from '../../components/Modal/Modal';
+import Loader from '../../components/Loader/Loader';
 import useFetch from '../../hooks/useFetch';
-import CustomTable from '../../elements/Table/Table';
+import CustomTable from '../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
 
 type Agent = {

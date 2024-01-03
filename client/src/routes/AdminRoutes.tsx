@@ -1,8 +1,8 @@
 import React from 'react';
-import Sidebar from '../elements/Sidebar/Sidebar';
+import Sidebar from '../components/Sidebar/Sidebar';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AdminDashboard from '../pages/AdminDashboard/AdminDashboard';
-import Main from '../elements/Main/Main';
+import Main from '../components/Main/Main';
 import SettingsRoutes from './SettingsRoutes';
 import AdminParticipants from '../pages/AdminParticipants/AdminParticipants';
 import AdminRepas from '../pages/AdminRepas/AdminRepas';

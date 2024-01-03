@@ -1,9 +1,9 @@
 import React from 'react';
-import CustomTable from '../../elements/Table/Table';
+import CustomTable from '../../components/Table/Table';
 
 const AdminEntites = () => {
 
-  
+
 
 
   return (

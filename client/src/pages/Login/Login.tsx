@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import usePost from '../../hooks/usePost';
-import Loader from '../../elements/Loader/Loader';
+import Loader from '../../components/Loader/Loader';
 
 type formType = {
     email_utilisateur: string,
