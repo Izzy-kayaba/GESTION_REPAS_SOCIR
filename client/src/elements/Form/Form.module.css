@@ -1,0 +1,29 @@
+.row {
+  background-color: #e9ecef !important;
+  padding-block: 1rem;
+  margin-block: 2rem;
+  border: 1px solid #edf0f1;
+  border-radius: 0.4rem;
+}
+
+.avatar {
+  display: block;
+  margin-top: 1rem;
+  width: 100%;
+  border-radius: 0.4rem;
+  aspect-ratio: 2/1;
+}
+
+.formControl {
+    margin: 0 auto;
+}
+
+.bouton {
+    background: var(--bleu-fonce);
+    border: 1px solid var(--bleu-ciel);
+}
+
+.bouton:hover {
+    background: var(--bleu-fonce-hover);
+    border: 1px solid var(--bleu-ciel);
+}
