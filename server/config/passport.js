@@ -25,8 +25,8 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
     new LocalStrategy(
         {
-            usernameField: "email_utilisateur",
-            passwordField: "mot_de_passe"
+            usernameField: "identifier",
+            passwordField: "password"
         },
         async (email, password, done) => {
             try {

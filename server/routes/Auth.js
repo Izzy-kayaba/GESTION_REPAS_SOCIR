@@ -29,26 +29,30 @@ router.post("/register", async (req, res) => {
 })
 
 // Login
-router.post("/login", passport.authenticate("local"), async (req, res) => {
-    const { email_utilisateur, mot_de_passe } = req.body;
+router.post("/local", passport.authenticate("local"), async (req, res) => {
+
+    const email_utilisateur = req.body.identifier;
+    const mot_de_passe = req.body.password;;
 
     try {
-        const user = await User.findByEmail(email_utilisateur);
+        const existingUser = await User.findByEmail(email_utilisateur);
 
-        if (!user) {
+        if (!existingUser) {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
-        const match = await bcrypt.compare(mot_de_passe, user.mot_de_passe);
+        const match = await bcrypt.compare(mot_de_passe, existingUser.mot_de_passe);
 
         if (match) {
             const token = jwt.sign(
-                { userId: user.id_utilisateur },
+                { userId: existingUser.id_utilisateur },
                 process.env.SECRET_CODE,
                 { expiresIn: "1h" }
             )
-            const { mot_de_passe, ...userWithoutPassword } = user;
-            return res.status(200).json({ userWithoutPassword, token, redirectUrl: "/admin", message: 'Login successful', });
+            const { mot_de_passe, ...user } = existingUser;
+
+            return res.status(200).json({ token, user, redirectUrl: "/admin", message: 'Login successful', });
+
         } else {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }

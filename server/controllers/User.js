@@ -10,18 +10,10 @@ const postUsers = async (req, res) => {
         if(!name || !surname || !email || !password || !confirmedPassword ) {
             res.status(400).json({ error : { message : "All fields are required"}});
             return;
-        }
-
-    
-        
+        }    
     } catch (error) {
-        
+        console.error(error)
     }
-
-
-
-
-
 }
 
 // Route to fetch data from the 'agents' table
