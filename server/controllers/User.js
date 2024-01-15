@@ -16,14 +16,14 @@ const postUsers = async (req, res) => {
     }
 }
 
-// Route to fetch data from the 'agents' table
+// Route to fetch data from the 'users' table
 const getUsers = async (req, res) => {
     pool.connect()
         .then(client => {
             return client.query('SELECT * FROM utilisateurs')
                 .then(result => {
-                    const agents = result.rows;
-                    res.json(agents);
+                    const users = result.rows;
+                    res.json({"data" : users, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

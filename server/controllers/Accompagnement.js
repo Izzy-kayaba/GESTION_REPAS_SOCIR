@@ -6,8 +6,8 @@ const getAccompagnements = async (req, res) => {
         .then(client => {
             return client.query('SELECT * FROM accompagnements')
                 .then(result => {
-                    const agents = result.rows;
-                    res.json(agents);
+                    const accompagnements = result.rows;
+                    res.json({"data" : accompagnements, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

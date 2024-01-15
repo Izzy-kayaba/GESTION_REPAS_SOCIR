@@ -7,7 +7,7 @@ const getCondiments = async (req, res) => {
             return client.query('SELECT * FROM condiments')
                 .then(result => {
                     const condiments = result.rows;
-                    res.json(condiments);
+                    res.json({"data" : condiments, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

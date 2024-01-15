@@ -5,6 +5,7 @@ import Loader from '../../components/Loader/Loader';
 import useFetch from '../../hooks/useFetch';
 import CustomTable from '../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
+import useTable from '../../hooks/useTable';
 
 type Agent = {
   id_agent?: number;
@@ -51,18 +52,21 @@ const Agents: React.FC = () => {
   const { data: fonctions }: any = useFetch({ endpoint: "api/fonctions" });
   const { data: departements }: any = useFetch({ endpoint: "api/departements" });
 
-  useEffect(() => {
-    // Combine data from repas_agents with related tables
-    if (agents && entites && departements && fonctions && tours) {
 
-      const processedData = agents.map((agent: any) => ({
-        ...agent,
-        agent_tour: tours.find((tour: any) => tour.id_tour === agent.id_tour)?.nom_tour,
-        agent_entite: entites.find((entite: any) => entite.id_entite === agent.id_entite)?.nom_entite,
-        agent_departement: departements.find((departement: any) => departement.id_dep === agent.id_dep)?.nom_dep,
-        agent_fonction: fonctions.find((fonction: any) => fonction.id_fonction === agent.id_fonction)?.nom_fonction,
+  useEffect(() => {
+
+    if (agents?.data && entites?.data && departements?.data && fonctions?.data && tours?.data) {
+      // Combine data from repas_agents with related tables
+      const processedData = agents?.data.map((agent: any) => ({
+        id_agent: agent.id,
+        ...agent?.attributes,
+        agent_tour: tours?.data.find((tour: any) => tour.id_tour === agent.id_tour)?.nom_tour,
+        agent_entite: entites?.data.find((entite: any) => entite.id_entite === agent.id_entite)?.nom_entite,
+        agent_departement: departements?.data.find((departement: any) => departement.id_dep === agent.id_dep)?.nom_dep,
+        agent_fonction: fonctions?.data.find((fonction: any) => fonction.id_fonction === agent.id_fonction)?.nom_fonction,
       }));
       setDisplayData(processedData);
+      console.log(displayData)
     }
   }, [agents, entites, departements, fonctions, tours]);
 
@@ -72,9 +76,9 @@ const Agents: React.FC = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrage des agents en fonction du terme de recherche
+  // // Filtrage des agents en fonction du terme de recherche
   const filteredAgents = displayData?.filter((agent) =>
-    agent.nom_agent.toLowerCase().includes(searchTerm.toLowerCase())
+    agent.nom_agent?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Rendu du composant

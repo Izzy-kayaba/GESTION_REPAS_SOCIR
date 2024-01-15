@@ -50,15 +50,15 @@ const AdminAudit: React.FC = () => {
         if (data && entites && departements && fonctions && tours) {
             const processedData = data?.map((item: any) => ({
                 ...item,
-                matr_agent: agents?.find((agent: any) => agent.id_agent === item.id_agent)?.matr_agent,
-                nom_agent: agents?.find((agent: any) => agent.id_agent === item.id_agent)?.nom_agent,
-                condiment: condiments?.find((condiment: any) => condiment.id_condiment === item.id_condiment)?.nom_condiment,
-                aliment: aliments?.find((aliment: any) => aliment.id_aliment === item.id_aliment)?.nom_aliment,
-                accompagnement: accompagnements?.find((accompagnement: any) => accompagnement.id_accompagnement === item.id_accompagnement)?.nom_accompagnement,
-                agent_fonction: fonctions?.find((fonction: any) => fonction.id_fonction === item.id_fonction)?.nom_fonction,
-                tour_agent: tours?.find((tour: any) => tour.id_tour === agents?.find((agent: any) => agent.id_agent === item.id_agent)?.id_tour)?.nom_tour,
-                entite_agent: entites?.find((entite: any) => entite.id_entite === agents?.find((agent: any) => agent.id_agent === item.id_agent)?.id_entite)?.nom_entite,
-                departement_agent: departements?.find((department: any) => department.id_dep === agents?.find((agent: any) => agent.id_agent === item.id_agent)?.id_dep)?.nom_dep,
+                matr_agent: agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.matr_agent,
+                nom_agent: agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.nom_agent,
+                condiment: condiments?.data.find((condiment: any) => condiment.id_condiment === item.id_condiment)?.nom_condiment,
+                aliment: aliments?.data.find((aliment: any) => aliment.id_aliment === item.id_aliment)?.nom_aliment,
+                accompagnement: accompagnements?.data.find((accompagnement: any) => accompagnement.id_accompagnement === item.id_accompagnement)?.nom_accompagnement,
+                agent_fonction: fonctions?.data.find((fonction: any) => fonction.id_fonction === item.id_fonction)?.nom_fonction,
+                tour_agent: tours?.data.find((tour: any) => tour.id_tour === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_tour)?.nom_tour,
+                entite_agent: entites?.data.find((entite: any) => entite.id_entite === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_entite)?.nom_entite,
+                departement_agent: departements?.data.find((department: any) => department.id_dep === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_dep)?.nom_dep,
             }));
 
             setDisplayData(processedData);

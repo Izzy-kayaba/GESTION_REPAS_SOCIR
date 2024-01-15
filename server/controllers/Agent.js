@@ -21,7 +21,7 @@ const getAgents = async (req, res) => {
             res.status(404).json({ error: 'No agents found with the specified criteria' });
         } else {
             const agents = result.rows;
-            res.json(agents);
+            res.json({"data" : agents, "meta": "pagination"});
         }
         client.release();
     } catch (err) {
@@ -41,7 +41,7 @@ const getAgentsById = async (req, res) => {
                         // If no agent is found with the specified ID
                         res.status(404).json({ error: 'Agent not found' });
                     } else {
-                        res.json({ agents: [result.rows[0]] });
+                        res.json({ "data": [result.rows[0]] });
                     }
                 })
                 .catch(err => {
