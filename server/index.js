@@ -8,7 +8,7 @@ const passport = require("./config/passport");
 const bodyParser = require('body-parser');
 const { pool } = require("./config/dbConfig");
 const app = express();
-const port = process.env.PORT || 1100;
+const port = process.env.PORT || 1010;
 
 const authRoutes = require("./routes/Auth")
 const userRoutes = require("./routes/Users")
@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
   res.send('Hello, welcome to your Node.js app!');
 });
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/repas", repasRoutes);
 app.use("/api/tours", toursRoutes);

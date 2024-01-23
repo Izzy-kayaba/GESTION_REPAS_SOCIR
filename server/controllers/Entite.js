@@ -7,7 +7,7 @@ const getEntites = async (req, res) => {
             return client.query('SELECT * FROM entites')
                 .then(result => {
                     const entites = result.rows;
-                    res.json(entites);
+                    res.json({"data" : entites, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

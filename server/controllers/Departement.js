@@ -7,7 +7,7 @@ const getDepartements = async (req, res) => {
             return client.query('SELECT * FROM dep_service')
                 .then(result => {
                     const departements = result.rows;
-                    res.json(departements);
+                    res.json({"data" : departements, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

@@ -10,28 +10,20 @@ const postUsers = async (req, res) => {
         if(!name || !surname || !email || !password || !confirmedPassword ) {
             res.status(400).json({ error : { message : "All fields are required"}});
             return;
-        }
-
-    
-        
+        }    
     } catch (error) {
-        
+        console.error(error)
     }
-
-
-
-
-
 }
 
-// Route to fetch data from the 'agents' table
+// Route to fetch data from the 'users' table
 const getUsers = async (req, res) => {
     pool.connect()
         .then(client => {
             return client.query('SELECT * FROM utilisateurs')
                 .then(result => {
-                    const agents = result.rows;
-                    res.json(agents);
+                    const users = result.rows;
+                    res.json({"data" : users, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

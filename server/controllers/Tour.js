@@ -7,7 +7,7 @@ const getTours = async (req, res) => {
             return client.query('SELECT * FROM tours')
                 .then(result => {
                     const tours = result.rows;
-                    res.json(tours);
+                    res.json({"data" : tours, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

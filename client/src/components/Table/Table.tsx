@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import style from "./Table.module.css"
 
 // Define interfaces for table columns and props
 interface TableColumn {
@@ -13,14 +14,13 @@ interface TableProps {
   columns: TableColumn[];
   data: any[];
   rowsPerPage: number;
-  isLink? : Boolean;
+  isLink?: Boolean;
 }
 
 const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink }) => {
 
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
- 
 
   // State to manage the current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +32,7 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink 
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
   // Slice the data array to get the data for the current page
+
   const currentData = data.slice(startIndex, endIndex);
 
   // Styles for table header (th)
@@ -77,13 +78,13 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink 
   };
 
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
-    <div>
+    <div className="mt-4">
       {/* React Bootstrap Table component */}
-      <Table bordered hover>
+      <Table bordered hover responsive>
         <thead>
           <tr>
             {/* Map through columns and create th elements */}

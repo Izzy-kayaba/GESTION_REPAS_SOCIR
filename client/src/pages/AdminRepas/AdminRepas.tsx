@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Tableau from '../../components/Tableau';
 import useFetch from '../../hooks/useFetch';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 
 type Aliment = {
     id_aliment: number;
     nom_aliment: string;
 };
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const AdminRepas: React.FC = () => {
 
@@ -42,7 +36,7 @@ const AdminRepas: React.FC = () => {
     return (
         <div>
             <div>
-                <Autocomplete
+                {/* <Autocomplete
                     multiple
                     id="checkboxes-tags-demo"
                     options={aliments?.data}
@@ -64,10 +58,9 @@ const AdminRepas: React.FC = () => {
                     renderInput={(params) => (
                         <TextField {...params} label="Selectionner les aliments du jour" placeholder="Aliments" />
                     )}
-                />
+                /> */}
 
                 <form action="">
-
                     <div>
                         {selectedAliments?.map((item) =>
                             <>

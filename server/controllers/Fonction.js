@@ -7,7 +7,7 @@ const getFonctions = async (req, res) => {
             return client.query('SELECT * FROM fonctions')
                 .then(result => {
                     const fonctions = result.rows;
-                    res.json(fonctions);
+                    res.json({"data" : fonctions, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);

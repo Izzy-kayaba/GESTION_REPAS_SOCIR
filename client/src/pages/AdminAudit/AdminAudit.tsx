@@ -1,90 +1,133 @@
 import React, { useEffect, useState } from 'react';
-import Table from "../../components/Table/Table";
+import CustomTable from "../../components/Table/Table";
 import { Card } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
+import InputControl from '../../components/Form/InputControl';
+import Loader from '../../components/Loader/Loader';
 
 const AdminAudit: React.FC = () => {
 
     const tableColumns = [
         { title: 'Matricule', dataKey: 'matr_agent' },
-        { title: 'Agent', dataKey: 'id_agent' },
-        { title: 'Entite', dataKey: 'id_entite' },
-        { title: 'Departement', dataKey: 'id_dep' },
-        { title: 'Tour', dataKey: 'id_tour' },
-        { title: 'Condiment', dataKey: 'id_condiment' },
-        { title: 'Accompagnement', dataKey: 'id_accompagnement' },
-        { title: 'Aliment', dataKey: 'id_aliment' },
+        { title: 'Agent', dataKey: 'nom_agent' },
+        { title: 'Entite', dataKey: 'entite_agent' },
+        { title: 'Departement', dataKey: 'departement_agent' },
+        { title: 'Tour', dataKey: 'tour_agent' },
+        { title: 'Condiment', dataKey: 'condiment' },
+        { title: 'Accompagnement', dataKey: 'accompagnement' },
+        { title: 'Aliment', dataKey: 'aliment' },
         { title: 'Prix', dataKey: 'prix' },
         { title: 'Jour Du Repas', dataKey: 'date_cree' },
         { title: 'Commentaire', dataKey: 'commentaires' }
     ];
 
+    const initialFormData = {
+        matricule: "",
+        agent: "",
+        entite: ""
+    }
+
     // Utiliser l'état pour gérer les données lisibles par les utilisateurs
     const [displayData, setDisplayData] = useState<any[]>([]);
-    const [filterBy, setFilterby] = useState<any>("")
+    const [filterBy, setFilterby] = useState<any>("");
+    const [formValues, setFormValues] = useState<any>(initialFormData);
 
-    const data = useFetch({ endpoint: "api/repas-agents" });
+    // State hooks to store the data
+    const { data, isLoading, isError }: any = useFetch({ endpoint: "api/repas-agents" });
 
-    console.log(data)
+    // Other api calls for select options
+    const { data: tours }: any = useFetch({ endpoint: "api/tours" });
+    const { data: agents }: any = useFetch({ endpoint: "api/agents" });
+    const { data: entites }: any = useFetch({ endpoint: "api/entites" });
+    const { data: aliments }: any = useFetch({ endpoint: "api/aliments" });
+    const { data: fonctions }: any = useFetch({ endpoint: "api/fonctions" });
+    const { data: condiments }: any = useFetch({ endpoint: "api/condiments" });
+    const { data: departements }: any = useFetch({ endpoint: "api/departements" });
+    const { data: accompagnements }: any = useFetch({ endpoint: "api/accompagnements" });
 
     useEffect(() => {
-        const zuaData = async () => {
-            try {
-                var data = await fetch("http://localhost:1100/api/repas-agents");
-                var dataYagents = await fetch("http://localhost:1100/api/agents");
-                var dataYaCondiments = await fetch("http://localhost:1100/api/condiments");
+        // Combine data from repas_agents with related tables
+        if (data && entites && departements && fonctions && tours) {
+            const processedData = data?.map((item: any) => ({
+                ...item,
+                matr_agent: agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.matr_agent,
+                nom_agent: agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.nom_agent,
+                condiment: condiments?.data.find((condiment: any) => condiment.id_condiment === item.id_condiment)?.nom_condiment,
+                aliment: aliments?.data.find((aliment: any) => aliment.id_aliment === item.id_aliment)?.nom_aliment,
+                accompagnement: accompagnements?.data.find((accompagnement: any) => accompagnement.id_accompagnement === item.id_accompagnement)?.nom_accompagnement,
+                agent_fonction: fonctions?.data.find((fonction: any) => fonction.id_fonction === item.id_fonction)?.nom_fonction,
+                tour_agent: tours?.data.find((tour: any) => tour.id_tour === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_tour)?.nom_tour,
+                entite_agent: entites?.data.find((entite: any) => entite.id_entite === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_entite)?.nom_entite,
+                departement_agent: departements?.data.find((department: any) => department.id_dep === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_dep)?.nom_dep,
+            }));
 
-                if (!data.ok) {
-                    throw new Error(`HTTP error! Status: ${data.status}`);
-                }
-                const agentsConvertis = await dataYagents.json();
-                const condimentsConvertis = await dataYaCondiments.json();
-                const dataConvertis = await data.json();
-
-                const dataCombine = dataConvertis.map((dataConverti: any) => ({
-                    ...dataConverti,
-                    matr_agent: agentsConvertis.find((agent: any) => agent.id_agent == dataConverti.id_agent)?.matr_agent,
-                    id_agent: agentsConvertis.find((agent: any) => agent.id_agent == dataConverti.id_agent)?.nom_agent,
-                    id_condiment: condimentsConvertis.find((condiment: any) => condiment.id_condiment == dataConverti.id_condiment)?.nom_condiment
-                }))
-
-                setDisplayData(dataCombine)
-            }
-            catch (error) {
-                console.log(error)
-            }
+            setDisplayData(processedData);
         }
+    }, [data, entites, departements, fonctions, tours]);
 
-        zuaData();
-    }, [])
+    const filteredData = displayData?.filter((item) =>
+        item.nom_agent?.toLowerCase().includes(formValues.agent.toLowerCase())
+    )?.filter((item) =>
+        item.matr_agent?.toLowerCase().includes(formValues.matricule.toLowerCase())
+    )?.filter((item) => {
+        if (formValues.entite.length == 0) {
+            return item.entite_agent
+        }
+        else { return item.entite_agent = formValues.entite }
+    });
 
-    console.log("filterBy", filterBy)
-
-    const dataFiltered = displayData?.filter((data) =>
-        data["matr_agent"] == 4456
-    )
-
-    console.log(dataFiltered)
-
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target ?? {}; // Use nullish coalescing to provide an empty object as default
+        setFormValues((prevData: any) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
     return (
-        <div>
-            <Card className="p-1 mx-1 mb-5">
+        <div className="m-1" >
+            <Card className="px-2 mb-5">
                 <div className="row mb-2">
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="matr_agent">Matricule</label>
-                            <input type="text" placeholder='matricule' name="matr_agent" className="w-100 px-1" />
+                        <div className=" p-2">
+                            <InputControl
+                                label="Matricule"
+                                id='matricule'
+                                value={formValues?.matricule}
+                                type='text'
+                                name='matricule'
+                                placeholder="e.g. 3902"
+                                handleChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className=" p-2">
+                            <InputControl
+                                label="Agent"
+                                id='agent'
+                                value={formValues?.agent}
+                                type='text'
+                                name='agent'
+                                placeholder="John Smith"
+                                handleChange={handleChange}
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="id_agent">Agent</label>
-                            <input type="text" placeholder='Agent' name="id_agent" className="w-100 px-1" />
+                        <div className="p-2">
+                            <label htmlFor="id_entite">Entite</label>
+                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
+                                <option value="">Select</option>
+                                {tableColumns.map((table, index) =>
+                                    <option value={table.title} key={index}>{table.title}</option>
+                                )}
+                            </select>
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
+                        <div className="p-2">
                             <label htmlFor="id_entite">Entite</label>
                             <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
                                 {tableColumns.map((table, index) =>
@@ -94,27 +137,18 @@ const AdminAudit: React.FC = () => {
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
+                        <div className="p-2">
                             <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
+                            <select name="entite" id="entite" value={formValues.entite} onChange={handleChange}>
+                                <option value=""> Select an entite </option>
+                                {entites?.map((item: any) =>
+                                    <option value={item.nom_entite} key={item.id_entite}>{item.nom_entite}</option>
                                 )}
                             </select>
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
+                        <div className="p-2">
                             <label htmlFor="">Texte</label>
                         </div>
                     </div>
@@ -122,17 +156,17 @@ const AdminAudit: React.FC = () => {
 
                 <div className="row mb-2">
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
+                        <div className="p-2">
                             <label htmlFor="">Texte</label>
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
+                        <div className="p-2">
                             <label htmlFor="">Texte</label>
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
+                        <div className="p-2">
                             <label htmlFor="">Texte</label>
                         </div>
                     </div>
@@ -163,48 +197,16 @@ const AdminAudit: React.FC = () => {
                         </select>
                     </div>
                 </div>
-                {/* <div className="row">
-                    <div className="col">
-                        <label htmlFor="">Matricule</label>
-                        <input type="text" placeholder='Matricule' />
-                    </div>
-                    <div className="col">
-                        <label htmlFor="">Agent</label>
-                        <input type="text" placeholder='Agent' />
-                    </div>
-                    <div className="col">
-                        <label htmlFor="">Aliment</label>
-                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                            {tableColumns.map((table, index) =>
-                                <option value={table.title} key={index}>{table.title}</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className="col">
-                        <label htmlFor="">Accompagnement</label>
-                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                            {tableColumns.map((table, index) =>
-                                <option value={table.title} key={index}>{table.title}</option>
-                            )}
-                        </select>
-                    </div>
-
-                    <div className="col">
-                        <label htmlFor="">Condiment</label>
-                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                            {tableColumns.map((table, index) =>
-                                <option value={table.title} key={index}>{table.title}</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className="col"></div>
-                    <div className="col"></div>
-                </div> */}
             </Card>
 
-            <Table columns={tableColumns} data={dataFiltered} rowsPerPage={10} isLink={false} />
+            {
+                isLoading ?
+                    <Loader /> :
+                    <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10} isLink={false} />
+            }
+
         </div>
     )
 }
 
-export default AdminAudit
+export default AdminAudit;

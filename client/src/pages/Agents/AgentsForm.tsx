@@ -52,13 +52,14 @@ const AgentsForm: React.FC = () => {
     const [formData, setFormData] = useState<AgentType>(initial_state);
 
     // Conditionally create the API endpoint based on whether id is defined
-    const apiEndpoint = id ? `api/agents/${id}` : undefined;
-    const agent: any = useFetch({ endpoint: apiEndpoint });
+    const apiEndpoint = id ? `api/agents/${id}?populate=*` : undefined;
+    const { data: agent, isLoading, isError }: any = useFetch({ endpoint: apiEndpoint });
+    console.log(agent)
 
     // Other api calls for select options
     const entites: any = useFetch({ endpoint: "api/entites" });
     const departements: any = useFetch({ endpoint: "api/departements" });
-    const fonctions: any = useFetch({ endpoint: "api/fonctions" });
+    const { data: fonctions }: any = useFetch({ endpoint: "api/fonctions" });
 
     const handleChange = (e: React.ChangeEvent<any>) => {
         const { name, value } = e.target;
@@ -71,7 +72,7 @@ const AgentsForm: React.FC = () => {
     useEffect(() => {
         if (id) {
             setUrl(`api/agents/${id}`)
-            setFormData(agent?.data?.agents[0]);
+            setFormData(agent?.data?.attributes);
         }
 
     }, [agent]);
@@ -102,6 +103,8 @@ const AgentsForm: React.FC = () => {
                 })
         }
     };
+
+    console.log(formData)
 
     return (
         <>
@@ -262,10 +265,10 @@ const AgentsForm: React.FC = () => {
                                     defaultValue={formData?.id_fonction}
                                     onChange={handleChange}>
                                     <option >Open this select menu</option>
-                                    {fonctions?.data?.map((fonction: any) =>
+                                    {fonctions?.data?.map((fonction: any, index: React.Key | null | undefined) =>
                                     (
-                                        <option key={fonction?.id_fonction}
-                                            value={parseInt(fonction?.id_fonction)}>
+                                        <option key={index}
+                                            value={parseInt(fonction?.id)}>
                                             {fonction?.nom_fonction}
                                         </option>
                                     ))}

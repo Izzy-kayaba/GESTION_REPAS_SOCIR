@@ -12,8 +12,8 @@ const getAliments = async (req, res) => {
         .then(client => {
             return client.query('SELECT * FROM aliments')
                 .then(result => {
-                    const agents = result.rows;
-                    res.json(agents);
+                    const aliments = result.rows;
+                    res.json({"data" : aliments, "meta": "pagination"});
                 })
                 .catch(err => {
                     console.error('Error executing query', err);
