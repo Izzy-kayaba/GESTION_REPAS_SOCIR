@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sexes",
+  "info": {
+    "singularName": "sexe",
+    "pluralName": "sexes",
+    "displayName": "Sexes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_sexe": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "repas_agents",
+  "info": {
+    "singularName": "repas-agent",
+    "pluralName": "repas-agents",
+    "displayName": "Repas Agents"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "id_agent": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::agent.agent"
+    },
+    "id_condiment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::condiment.condiment"
+    },
+    "id_aliment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::aliment.aliment"
+    },
+    "prix": {
+      "type": "float"
+    },
+    "commentaire": {
+      "type": "text"
+    },
+    "deleted": {
+      "type": "date"
+    }
+  }
+}

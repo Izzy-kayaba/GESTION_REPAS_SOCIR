@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "aliments",
+  "info": {
+    "singularName": "aliment",
+    "pluralName": "aliments",
+    "displayName": "Aliments"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_aliment": {
+      "type": "string"
+    }
+  }
+}

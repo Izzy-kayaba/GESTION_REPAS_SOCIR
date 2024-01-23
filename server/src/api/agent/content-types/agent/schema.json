@@ -1,0 +1,83 @@
+{
+  "kind": "collectionType",
+  "collectionName": "agents",
+  "info": {
+    "singularName": "agent",
+    "pluralName": "agents",
+    "displayName": "Agents",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_agent": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "postnom_agent": {
+      "type": "string"
+    },
+    "matr_agent": {
+      "type": "string"
+    },
+    "prenom_agent": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "email_agent": {
+      "type": "email"
+    },
+    "sexe": {
+      "type": "string"
+    },
+    "id_entite": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::entite.entite"
+    },
+    "id_fonction": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::fonction.fonction"
+    },
+    "id_tour": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tour.tour"
+    },
+    "id_accompagnement": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::accompagnement.accompagnement"
+    },
+    "id_departement": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::departement.departement"
+    },
+    "id_aliment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::aliment.aliment"
+    },
+    "id_condiment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::condiment.condiment"
+    }
+  }
+}

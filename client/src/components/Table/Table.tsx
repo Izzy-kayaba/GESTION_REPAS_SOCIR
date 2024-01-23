@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import style from "./Table.module.css"
+import Loader from '../Loader/Loader';
 
 // Define interfaces for table columns and props
 interface TableColumn {
@@ -14,10 +15,11 @@ interface TableProps {
   columns: TableColumn[];
   data: any[];
   rowsPerPage: number;
+  error?: Boolean;
   isLink?: Boolean;
 }
 
-const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink }) => {
+const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, error, isLink }) => {
 
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -29,11 +31,15 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink 
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
 
+  // Slice the data array to get the data for the current page
+  const currentData = data.slice(startIndex, endIndex);
+
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
-  // Slice the data array to get the data for the current page
-
-  const currentData = data.slice(startIndex, endIndex);
+  useEffect(() => {
+    // Reset to page 1 whenever filteredData changes
+    setCurrentPage(1);
+  }, [data]);
 
   // Styles for table header (th)
   const thStyle = {
@@ -84,38 +90,44 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, isLink 
   return (
     <div className="mt-4">
       {/* React Bootstrap Table component */}
-      <Table bordered hover responsive>
-        <thead>
-          <tr>
-            {/* Map through columns and create th elements */}
-            {columns.map((column, colIndex) => (
-              <th key={colIndex} onClick={() => handleSort(column.dataKey)} style={thStyle}>
-                {column.title}
-                {sortedColumn === column.dataKey && (
-                  <span>{sortOrder === 'asc' ? ' ▲' : ' ▼'}</span>
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through current data and create tr elements */}
-          {currentData.map((row, rowIndex) => (
-            <tr key={rowIndex} role='button'>
+
+
+      {error ?
+        <div className='mb-3'>
+          <Loader />
+        </div> : <Table bordered hover responsive>
+          <thead>
+            <tr>
+              {/* Map through columns and create th elements */}
               {columns.map((column, colIndex) => (
-                <td key={colIndex} style={tdStyle}>
-                  {/* This is navigating to the first property of the object */}
-                  <Link to={isLink ? `./${Object.values(row)[0]}` : `./`}
-                    className="nav-link">
-                    {row[column.dataKey]}
-                  </Link>
-                </td>
+                <th key={colIndex} onClick={() => handleSort(column.dataKey)} style={thStyle}>
+                  {column.title}
+                  {sortedColumn === column.dataKey && (
+                    <span>{sortOrder === 'asc' ? ' ▲' : ' ▼'}</span>
+                  )}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {/* Map through current data and create tr elements */}
+            {currentData.map((row, rowIndex) => (
+              <tr key={rowIndex} role='button'>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex} style={tdStyle}>
+                    {/* This is navigating to the first property of the object */}
+                    <Link to={isLink ? `./${Object.values(row)[0]}` : `./`}
+                      className="nav-link">
+                      {row[column.dataKey]}
+                    </Link>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
+      }
       {/* Pagination buttons */}
       <div className="d-flex justify-content-between align-items-center">
         <Button onClick={handlePreviousPage} disabled={currentPage === 1} variant="secondary" style={tdStyle}>

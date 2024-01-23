@@ -49,18 +49,17 @@ function Login() {
                     // Save user details to session storage
                     sessionStorage.setItem('userDetails', JSON.stringify(data?.user));
 
-                    toast.success('Connecte avec success !!', { position: toast.POSITION.TOP_RIGHT });
+                    toast.success('Connecte avec success !', { position: toast.POSITION.TOP_RIGHT });
 
                     // Redirect to the specified URL
                     if (data?.redirectUrl) {
                         router(data?.redirectUrl);
                     } else router("/admin");
-
                 }
             })
             .catch((err) => {
                 console.error(err)
-                toast.error('Error!!', { position: toast.POSITION.TOP_RIGHT });
+                toast.error('Error!', { position: toast.POSITION.TOP_RIGHT });
             })
     }
 
