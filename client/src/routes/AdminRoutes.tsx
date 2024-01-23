@@ -17,8 +17,8 @@ const AdminRoutes = () => {
                 <Routes>
                     {[
                         <Route key="dashboard" path="/" element={<AdminDashboard />} />,
-                        <Route key="repas-du-jour" path="repas-du-jour" element={<AdminRepas />} />,
-                        <Route key="ajouter-participant" path="ajouter-participant" element={<Agents />} />,
+                        <Route key="repas-du-jour" path="repas-du-jour" element={< AdminRepas />} />,
+                        <Route key="ajouter-participant" path="ajouter-participant" element={<AdminParticipants />} />,
                         <Route key="audit" path="audit" element={<AdminAudit />} />,
                         <Route key="configuration" path="configuration/*" element={<SettingsRoutes />} />,
                         <Route key="not-found" path="*" element={<Navigate to="/admin" />} />,

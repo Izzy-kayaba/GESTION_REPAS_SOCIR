@@ -19,12 +19,13 @@
 }
 
 .card {
-  box-shadow: -3px 0px 12px -3px rgba(9, 3, 71, 0.39);
+  box-shadow: -1px 1px 3px 0px rgba(9, 3, 71, 0.30);
+  transition: all 400ms;
 }
 
-.card:hover {
-  box-shadow: -3px 0px 12px 1px rgba(9, 4, 65, 0.39);
-}
+/* .card:hover {
+  box-shadow: -1px 1px 9px -0px rgba(9, 3, 71, 0.30);
+} */
 
 .admin_routes {
   background: #f1efef;

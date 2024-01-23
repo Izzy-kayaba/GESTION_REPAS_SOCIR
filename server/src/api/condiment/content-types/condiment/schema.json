@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "condiments",
+  "info": {
+    "singularName": "condiment",
+    "pluralName": "condiments",
+    "displayName": "Condiments"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_condiment": {
+      "type": "string"
+    }
+  }
+}

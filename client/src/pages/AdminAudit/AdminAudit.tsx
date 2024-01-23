@@ -1,160 +1,317 @@
 import React, { useEffect, useState } from 'react';
-import Table from "../../components/Table/Table";
+import CustomTable from "../../components/Table/Table";
 import { Card } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
+import InputControl from '../../components/Form/InputControl';
+import Loader from '../../components/Loader/Loader';
+import SelectContol from '../../components/Form/SelectControl';
 
 const AdminAudit: React.FC = () => {
 
+    interface FormData {
+        matricule: number;
+        agent: string;
+        entite: number;
+        departement: number;
+        tour: number;
+        condiment: number;
+        accompagnement: number;
+        aliment: number;
+        prix: number;
+    }
+
+
     const tableColumns = [
         { title: 'Matricule', dataKey: 'matr_agent' },
-        { title: 'Agent', dataKey: 'id_agent' },
-        { title: 'Entite', dataKey: 'id_entite' },
-        { title: 'Departement', dataKey: 'id_dep' },
-        { title: 'Tour', dataKey: 'id_tour' },
-        { title: 'Condiment', dataKey: 'id_condiment' },
-        { title: 'Accompagnement', dataKey: 'id_accompagnement' },
-        { title: 'Aliment', dataKey: 'id_aliment' },
+        { title: 'Agent', dataKey: 'nom_agent' },
+        { title: 'Entite', dataKey: 'entite_agent' },
+        { title: 'Departement', dataKey: 'departement_agent' },
+        { title: 'Tour', dataKey: 'tour_agent' },
+        { title: 'Condiment', dataKey: 'condiment' },
+        { title: 'Accompagnement', dataKey: 'accompagnement' },
+        { title: 'Aliment', dataKey: 'aliment' },
         { title: 'Prix', dataKey: 'prix' },
         { title: 'Jour Du Repas', dataKey: 'date_cree' },
         { title: 'Commentaire', dataKey: 'commentaires' }
     ];
 
+    const initialFormData = {
+        matricule: "",
+        agent: "",
+        entite: "",
+        departement: "",
+        tour: "",
+        condiment: "",
+        accompagnement: "",
+        aliment: "",
+        prix: ""
+    }
+
     // Utiliser l'état pour gérer les données lisibles par les utilisateurs
     const [displayData, setDisplayData] = useState<any[]>([]);
-    const [filterBy, setFilterby] = useState<any>("")
+    const [repasAgents, setRepasAgents] = useState<any[]>([]);
+    const [filterBy, setFilterby] = useState<any>("");
+    const [formValues, setFormValues] = useState<any>(initialFormData);
 
-    const data = useFetch({ endpoint: "api/repas-agents" });
+    // State hooks to store the data
+    const { data, isLoading, isError }: any = useFetch({ endpoint: `api/repas-agents?populate[id_agent][populate]=*` })
 
-    console.log(data)
+    // Other api calls for select options
+    const { data: tours }: any = useFetch({ endpoint: "api/tours" });
+    const { data: agents }: any = useFetch({ endpoint: "api/agents" });
+    const { data: entites }: any = useFetch({ endpoint: "api/entites" });
+    const { data: aliments }: any = useFetch({ endpoint: "api/aliments" });
+    const { data: fonctions }: any = useFetch({ endpoint: "api/fonctions" });
+    const { data: condiments }: any = useFetch({ endpoint: "api/condiments" });
+    const { data: departements }: any = useFetch({ endpoint: "api/departements" });
+    const { data: accompagnements }: any = useFetch({ endpoint: "api/accompagnements" });
+
+    const processRepasAgents = (data: any[]) => {
+        return data.map((item: any) => ({
+            id_repas_agent: item.id,
+            ...item?.attributes,
+            matr_agent: item?.attributes?.id_agent?.data?.attributes?.matr_agent,
+            nom_agent: item?.attributes?.id_agent?.data?.attributes?.nom_agent,
+            aliment: item?.attributes?.id_agent?.data?.attributes?.id_aliment?.data?.attributes?.nom_aliment,
+            condiment: item?.attributes?.id_agent?.data?.attributes?.id_condiment?.data?.attributes?.nom_condiment,
+            accompagnement: item?.attributes?.id_agent?.data?.attributes?.id_accompagnement?.data?.attributes?.nom_accompagnement,
+            agent_fonction: item?.attributes?.id_agent?.data?.attributes?.id_fonction?.data?.attributes?.nom_fonction,
+            tour_agent: item?.attributes?.id_agent?.data?.attributes?.id_tour?.data?.attributes?.nom_tour,
+            entite_agent: item?.attributes?.id_agent?.data?.attributes?.id_entite?.data?.attributes?.nom_entite,
+            departement_agent: item?.attributes?.id_agent?.data?.attributes?.id_departement?.data?.attributes?.nom_departement,
+            date_cree: item.attributes.createdAt,
+        }));
+    };
 
     useEffect(() => {
-        const zuaData = async () => {
-            try {
-                var data = await fetch("http://localhost:1100/api/repas-agents");
-                var dataYagents = await fetch("http://localhost:1100/api/agents");
-                var dataYaCondiments = await fetch("http://localhost:1100/api/condiments");
-
-                if (!data.ok) {
-                    throw new Error(`HTTP error! Status: ${data.status}`);
-                }
-                const agentsConvertis = await dataYagents.json();
-                const condimentsConvertis = await dataYaCondiments.json();
-                const dataConvertis = await data.json();
-
-                const dataCombine = dataConvertis.map((dataConverti: any) => ({
-                    ...dataConverti,
-                    matr_agent: agentsConvertis.find((agent: any) => agent.id_agent == dataConverti.id_agent)?.matr_agent,
-                    id_agent: agentsConvertis.find((agent: any) => agent.id_agent == dataConverti.id_agent)?.nom_agent,
-                    id_condiment: condimentsConvertis.find((condiment: any) => condiment.id_condiment == dataConverti.id_condiment)?.nom_condiment
-                }))
-
-                setDisplayData(dataCombine)
-            }
-            catch (error) {
-                console.log(error)
-            }
+        // Combine data from repas_agents with related tables
+        if (data) {
+            setRepasAgents(data?.data);
+            setDisplayData(processRepasAgents(data?.data));
         }
+    }, [data]);
 
-        zuaData();
-    }, [])
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/api/repas-agents?populate[id_agent][populate]=*&filters[id_agent][nom_agent][$startsWithi]=${formValues.agent}` +
+                `&filters[id_agent][id_tour][id][$containsi]=${formValues.tour}` +
+                `&filters[id_agent][id_entite][id][$containsi]=${formValues.entite}` +
+                `&filters[id_agent][id_aliment][id][$containsi]=${formValues.aliment}` +
+                `&filters[id_agent][matr_agent][$startsWithi]=${formValues.matricule}` +
+                `&filters[id_agent][id_condiment][id][$containsi]=${formValues.condiment}` +
+                `&filters[id_agent][id_departement][id][$containsi]=${formValues.departement}` +
+                `&filters[id_agent][id_accompagnement][id][$containsi]=${formValues.accompagnement}`);
 
-    console.log("filterBy", filterBy)
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            setRepasAgents(data?.data);
+            setDisplayData(processRepasAgents(data?.data));
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
-    const dataFiltered = displayData?.filter((data) =>
-        data["matr_agent"] == 4456
-    )
-
-    console.log(dataFiltered)
-
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target ?? {}; // Use nullish coalescing to provide an empty object as default
+        setFormValues((prevData: any) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
     return (
-        <div>
-            <Card className="p-1 mx-1 mb-5">
+        <div className="m-1" >
+            <Card className="px-2 mb-5">
                 <div className="row mb-2">
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="matr_agent">Matricule</label>
-                            <input type="text" placeholder='matricule' name="matr_agent" className="w-100 px-1" />
+                        <div className=" p-2">
+                            <InputControl
+                                label="Matricule"
+                                id='matricule'
+                                value={formValues?.matricule}
+                                type='number'
+                                name='matricule'
+                                placeholder="e.g. 3902"
+                                handleChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className=" p-2">
+                            <InputControl
+                                label="Agent"
+                                id='agent'
+                                value={formValues?.agent}
+                                type='text'
+                                name='agent'
+                                placeholder="John Smith"
+                                handleChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className="p-2">
+                            <SelectContol
+                                label='Entite'
+                                name='entite'
+                                id='entite'
+                                value={formValues?.entite}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={entites}
+                                option='nom_entite'
+                                defaultMessage='- Tout sélectionner -'
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="id_agent">Agent</label>
-                            <input type="text" placeholder='Agent' name="id_agent" className="w-100 px-1" />
+                        <div className="p-2">
+                            <SelectContol
+                                label='Tour'
+                                name='tour'
+                                id='tour'
+                                value={formValues?.tour}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={tours}
+                                option='nom_tour'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
+
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Condiment'
+                                name='condiment'
+                                id='condiment'
+                                value={formValues?.condiment}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={condiments}
+                                option='nom_condiment'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                 </div>
 
                 <div className="row mb-2">
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Accompagnement'
+                                name='accompagnement'
+                                id='accompagnement'
+                                value={formValues?.accompagnement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={accompagnements}
+                                option='nom_accompagnement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Aliment'
+                                name='aliment'
+                                id='aliment'
+                                value={formValues?.aliment}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={aliments}
+                                option='nom_aliment'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <InputControl
+                                label="Prix"
+                                id='prix'
+                                value={formValues?.prix}
+                                type='number'
+                                name='prix'
+                                placeholder="e.g. 1000FC"
+                                handleChange={handleChange}
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
-                        </div>
-                    </div>
+
                 </div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between my-3">
                     <div>
-                        <button>Filter</button>
+                        <button onClick={handleSearch}>Filter</button>
                     </div>
                     <div>
                         <select name="" id="">
@@ -163,48 +320,12 @@ const AdminAudit: React.FC = () => {
                         </select>
                     </div>
                 </div>
-                {/* <div className="row">
-                    <div className="col">
-                        <label htmlFor="">Matricule</label>
-                        <input type="text" placeholder='Matricule' />
-                    </div>
-                    <div className="col">
-                        <label htmlFor="">Agent</label>
-                        <input type="text" placeholder='Agent' />
-                    </div>
-                    <div className="col">
-                        <label htmlFor="">Aliment</label>
-                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                            {tableColumns.map((table, index) =>
-                                <option value={table.title} key={index}>{table.title}</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className="col">
-                        <label htmlFor="">Accompagnement</label>
-                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                            {tableColumns.map((table, index) =>
-                                <option value={table.title} key={index}>{table.title}</option>
-                            )}
-                        </select>
-                    </div>
-
-                    <div className="col">
-                        <label htmlFor="">Condiment</label>
-                        <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                            {tableColumns.map((table, index) =>
-                                <option value={table.title} key={index}>{table.title}</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className="col"></div>
-                    <div className="col"></div>
-                </div> */}
             </Card>
 
-            <Table columns={tableColumns} data={dataFiltered} rowsPerPage={10} isLink={false} />
+            <CustomTable columns={tableColumns} data={displayData} rowsPerPage={10} error={isError} isLink={false} />
+
         </div>
     )
 }
 
-export default AdminAudit
+export default AdminAudit;

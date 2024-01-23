@@ -14,7 +14,7 @@ const Header: React.FC = () => {
             </div>
             <div className="d-flex align-items-center gap-2">
                 <Nav.Link href="#home">
-                    {userProfile?.nom_utilisateur.toUpperCase()}
+                    {userProfile?.nom_utilisateur?.toUpperCase()}
                 </Nav.Link>
                 <Nav.Link href="#home">
                     <img src="https://via.placeholder.com/40x40" className="rounded-circle" />

@@ -14,16 +14,29 @@
   aspect-ratio: 2/1;
 }
 
+.formLabel {
+  color: var(--bleu-fonce);
+  font-weight: 500;
+}
+
 .formControl {
-    margin: 0 auto;
+  margin: 0 auto;
+  border: 2px solid #c5c3c3;
+  width: 100%;
+  padding: 0 0.2rem;
+}
+
+.formControl:focus {
+  outline: none;
+  border: 2px solid var(--bleu-fonce);
 }
 
 .bouton {
-    background: var(--bleu-fonce);
-    border: 1px solid var(--bleu-ciel);
+  background: var(--bleu-fonce);
+  border: 1px solid var(--bleu-ciel);
 }
 
 .bouton:hover {
-    background: var(--bleu-fonce-hover);
-    border: 1px solid var(--bleu-ciel);
+  background: var(--bleu-fonce-hover);
+  border: 1px solid var(--bleu-ciel);
 }

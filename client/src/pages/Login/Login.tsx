@@ -1,15 +1,15 @@
 import React, { FormEvent, useState } from 'react';
 import style from "./Login.module.css"
 import { useUserContext } from '../../helpers/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import usePost from '../../hooks/usePost';
 import Loader from '../../components/Loader/Loader';
 
 type formType = {
-    email_utilisateur: string,
-    mot_de_passe: string
+    identifier: string,
+    password: string
 }
 
 function Login() {
@@ -19,8 +19,8 @@ function Login() {
     const router = useNavigate();
 
     const initialState = {
-        email_utilisateur: "",
-        mot_de_passe: ""
+        identifier: "",
+        password: ""
     }
 
     const handleChange = (e: React.ChangeEvent<any>) => {
@@ -32,28 +32,34 @@ function Login() {
     };
 
     const [formValues, setFormValues] = useState<formType>(initialState);
-    const {
-        state: { data, isLoading, isError },
-        httpPost
-    } = usePost({ endpoint: "auth/login" });
+    const { httpPost } = usePost({ endpoint: "api/auth/local" });
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
         httpPost(formValues)
-            .then(() => {
-                if (data !== null) {
-                    // Save user details to session storage
-                    sessionStorage.setItem('userDetails', JSON.stringify(data?.userWithoutPassword));
+            .then(async (response: any) => {
+
+                if (response.ok) {
+
+                    const data = await response.json();
                     // Update user context value using setUserProfile
-                    setUserProfile(data?.userWithoutPassword);
+                    setUserProfile(data);
+
+                    // Save user details to session storage
+                    sessionStorage.setItem('userDetails', JSON.stringify(data?.user));
+
+                    toast.success('Connecte avec success !', { position: toast.POSITION.TOP_RIGHT });
 
                     // Redirect to the specified URL
-                    router(data.redirectUrl);
+                    if (data?.redirectUrl) {
+                        router(data?.redirectUrl);
+                    } else router("/admin");
                 }
-
-            }).catch((err) => {
+            })
+            .catch((err) => {
                 console.error(err)
+                toast.error('Error!', { position: toast.POSITION.TOP_RIGHT });
             })
     }
 
@@ -66,9 +72,9 @@ function Login() {
                     </h2>
                     <h4 className={style.h4}>GESTION REPAS </h4>
                     <form onSubmit={handleSubmit} className={style.form}>
-                        <input type="email" name="email_utilisateur" id="email_utilisateur" placeholder="Adresse email" onChange={handleChange} className={style.input} />
-                        <input type="password" name="mot_de_passe" id="mot_de_passe" placeholder="Mot de passe" onChange={handleChange} className={style.input} />
-                        <button type="submit" className={style.login_bouton} >Se connecter</button>
+                        <input type="email" name="identifier" id="identifier" placeholder="Adresse email" onChange={handleChange} className={style.input} />
+                        <input type="password" name="password" id="password" placeholder="Mot de passe" onChange={handleChange} className={style.input} />
+                        <button type="submit" className={style.login_bouton}>Se connecter</button>
                     </form>
                 </div>
             </div>
