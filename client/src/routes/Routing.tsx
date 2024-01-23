@@ -9,11 +9,11 @@ import {
 import Login from '../pages/Login/Login';
 import NotFound from '../pages/NotFound/NotFound';
 import AdminRoutes from '../routes/AdminRoutes'
-import { useUserContext } from '../helpers/UserContext';
+import { useUserContext } from '../helper/UserContext';
 
 const Routing: React.FC = () => {
 
-    const { userProfile } : any = useUserContext();
+    const { userProfile }: any = useUserContext();
     const isUserLoggedIn = userProfile !== undefined;
 
     return (

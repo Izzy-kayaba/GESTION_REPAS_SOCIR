@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Nav, NavDropdown } from 'react-bootstrap';
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { useUserContext } from "../../helpers/UserContext"
+import { useUserContext } from "../../helper/UserContext"
 
 const Header: React.FC = () => {
 

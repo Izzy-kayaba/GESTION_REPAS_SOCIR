@@ -1,5 +1,5 @@
 import './App.css';
-import { UserProvider } from './helpers/UserContext';
+import { UserProvider } from './helper/UserContext';
 import Routing from './routes/Routing';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
