@@ -6,12 +6,12 @@ module.exports = ({ env }) => {
       postgres: {
             connection: {
               connectionString: env('DATABASE_URL'),
-              host: env('DATABASE_HOST', 'localhost'),
-              port: env.int('DATABASE_PORT', 5432),
-              database: env('DATABASE_NAME', 'testDB'),
-              user: env('DATABASE_USERNAME', 'postgres'),
-              password: env('DATABASE_PASSWORD', 'icui4cu'),
-              schema: env('DATABASE_SCHEMA', 'public'),
+          host: env('DATABASE_HOST', process.env.DATABASE_HOST),
+          port: env.int('DATABASE_PORT', process.env.DATABASE_PORT),
+          database: env('DATABASE_NAME', process.env.DATABASE_NAME),
+          user: env('DATABASE_USERNAME', process.env.DATABASE_USERNAME),
+          password: env('DATABASE_PASSWORD', process.env.DATABASE_PASSWORD),
+          schema: env('DATABASE_SCHEMA', process.env.DATABASE_SCHEMA),
               ssl: env.bool('DATABASE_SSL', false) && {
                 key: env('DATABASE_SSL_KEY', undefined),
                 cert: env('DATABASE_SSL_CERT', undefined),
@@ -32,7 +32,7 @@ module.exports = ({ env }) => {
               filename: path.join(
                 __dirname,
                 '..',
-                env('DATABASE_FILENAME', '.tmp/data.db')
+                env('DATABASE_FILENAME', process.env.DATABASE_FILENAME)
               ),
             },
             useNullAsDefault: true,
