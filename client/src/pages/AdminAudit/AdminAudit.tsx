@@ -4,8 +4,22 @@ import { Card } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
 import InputControl from '../../components/Form/InputControl';
 import Loader from '../../components/Loader/Loader';
+import SelectContol from '../../components/Form/SelectControl';
 
 const AdminAudit: React.FC = () => {
+
+    interface FormData {
+        matricule: number;
+        agent: string;
+        entite: number;
+        departement: number;
+        tour: number;
+        condiment: number;
+        accompagnement: number;
+        aliment: number;
+        prix: number;
+    }
+
 
     const tableColumns = [
         { title: 'Matricule', dataKey: 'matr_agent' },
@@ -24,16 +38,23 @@ const AdminAudit: React.FC = () => {
     const initialFormData = {
         matricule: "",
         agent: "",
-        entite: ""
+        entite: "",
+        departement: "",
+        tour: "",
+        condiment: "",
+        accompagnement: "",
+        aliment: "",
+        prix: ""
     }
 
     // Utiliser l'état pour gérer les données lisibles par les utilisateurs
     const [displayData, setDisplayData] = useState<any[]>([]);
+    const [repasAgents, setRepasAgents] = useState<any[]>([]);
     const [filterBy, setFilterby] = useState<any>("");
     const [formValues, setFormValues] = useState<any>(initialFormData);
 
     // State hooks to store the data
-    const { data, isLoading, isError }: any = useFetch({ endpoint: "api/repas-agents" });
+    const { data, isLoading, isError }: any = useFetch({ endpoint: `api/repas-agents?populate[id_agent][populate]=*` })
 
     // Other api calls for select options
     const { data: tours }: any = useFetch({ endpoint: "api/tours" });
@@ -45,36 +66,52 @@ const AdminAudit: React.FC = () => {
     const { data: departements }: any = useFetch({ endpoint: "api/departements" });
     const { data: accompagnements }: any = useFetch({ endpoint: "api/accompagnements" });
 
+    const processRepasAgents = (data: any[]) => {
+        return data.map((item: any) => ({
+            id_repas_agent: item.id,
+            ...item?.attributes,
+            matr_agent: item?.attributes?.id_agent?.data?.attributes?.matr_agent,
+            nom_agent: item?.attributes?.id_agent?.data?.attributes?.nom_agent,
+            aliment: item?.attributes?.id_agent?.data?.attributes?.id_aliment?.data?.attributes?.nom_aliment,
+            condiment: item?.attributes?.id_agent?.data?.attributes?.id_condiment?.data?.attributes?.nom_condiment,
+            accompagnement: item?.attributes?.id_agent?.data?.attributes?.id_accompagnement?.data?.attributes?.nom_accompagnement,
+            agent_fonction: item?.attributes?.id_agent?.data?.attributes?.id_fonction?.data?.attributes?.nom_fonction,
+            tour_agent: item?.attributes?.id_agent?.data?.attributes?.id_tour?.data?.attributes?.nom_tour,
+            entite_agent: item?.attributes?.id_agent?.data?.attributes?.id_entite?.data?.attributes?.nom_entite,
+            departement_agent: item?.attributes?.id_agent?.data?.attributes?.id_departement?.data?.attributes?.nom_departement,
+            date_cree: item.attributes.createdAt,
+        }));
+    };
+
     useEffect(() => {
         // Combine data from repas_agents with related tables
-        if (data && entites && departements && fonctions && tours) {
-            const processedData = data?.map((item: any) => ({
-                ...item,
-                matr_agent: agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.matr_agent,
-                nom_agent: agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.nom_agent,
-                condiment: condiments?.data.find((condiment: any) => condiment.id_condiment === item.id_condiment)?.nom_condiment,
-                aliment: aliments?.data.find((aliment: any) => aliment.id_aliment === item.id_aliment)?.nom_aliment,
-                accompagnement: accompagnements?.data.find((accompagnement: any) => accompagnement.id_accompagnement === item.id_accompagnement)?.nom_accompagnement,
-                agent_fonction: fonctions?.data.find((fonction: any) => fonction.id_fonction === item.id_fonction)?.nom_fonction,
-                tour_agent: tours?.data.find((tour: any) => tour.id_tour === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_tour)?.nom_tour,
-                entite_agent: entites?.data.find((entite: any) => entite.id_entite === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_entite)?.nom_entite,
-                departement_agent: departements?.data.find((department: any) => department.id_dep === agents?.data.find((agent: any) => agent.id_agent === item.id_agent)?.id_dep)?.nom_dep,
-            }));
-
-            setDisplayData(processedData);
+        if (data) {
+            setRepasAgents(data?.data);
+            setDisplayData(processRepasAgents(data?.data));
         }
-    }, [data, entites, departements, fonctions, tours]);
+    }, [data]);
 
-    const filteredData = displayData?.filter((item) =>
-        item.nom_agent?.toLowerCase().includes(formValues.agent.toLowerCase())
-    )?.filter((item) =>
-        item.matr_agent?.toLowerCase().includes(formValues.matricule.toLowerCase())
-    )?.filter((item) => {
-        if (formValues.entite.length == 0) {
-            return item.entite_agent
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/api/repas-agents?populate[id_agent][populate]=*&filters[id_agent][nom_agent][$startsWithi]=${formValues.agent}` +
+                `&filters[id_agent][id_tour][id][$containsi]=${formValues.tour}` +
+                `&filters[id_agent][id_entite][id][$containsi]=${formValues.entite}` +
+                `&filters[id_agent][id_aliment][id][$containsi]=${formValues.aliment}` +
+                `&filters[id_agent][matr_agent][$startsWithi]=${formValues.matricule}` +
+                `&filters[id_agent][id_condiment][id][$containsi]=${formValues.condiment}` +
+                `&filters[id_agent][id_departement][id][$containsi]=${formValues.departement}` +
+                `&filters[id_agent][id_accompagnement][id][$containsi]=${formValues.accompagnement}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            setRepasAgents(data?.data);
+            setDisplayData(processRepasAgents(data?.data));
+        } catch (error) {
+            console.log(error)
         }
-        else { return item.entite_agent = formValues.entite }
-    });
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target ?? {}; // Use nullish coalescing to provide an empty object as default
@@ -94,7 +131,7 @@ const AdminAudit: React.FC = () => {
                                 label="Matricule"
                                 id='matricule'
                                 value={formValues?.matricule}
-                                type='text'
+                                type='number'
                                 name='matricule'
                                 placeholder="e.g. 3902"
                                 handleChange={handleChange}
@@ -115,41 +152,67 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
+
                     <div className="col-2 p-1">
                         <div className="p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                <option value="">Select</option>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
-                                )}
-                            </select>
+                            <SelectContol
+                                label='Entite'
+                                name='entite'
+                                id='entite'
+                                value={formValues?.entite}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={entites}
+                                option='nom_entite'
+                                defaultMessage='- Tout sélectionner -'
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
                         <div className="p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="" id="" value={filterBy} onChange={(e: any) => setFilterby(e.target?.value)}>
-                                {tableColumns.map((table, index) =>
-                                    <option value={table.title} key={index}>{table.title}</option>
-                                )}
-                            </select>
+                            <SelectContol
+                                label='Tour'
+                                name='tour'
+                                id='tour'
+                                value={formValues?.tour}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={tours}
+                                option='nom_tour'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
+
                     <div className="col-2 p-1">
                         <div className="p-2">
-                            <label htmlFor="id_entite">Entite</label>
-                            <select name="entite" id="entite" value={formValues.entite} onChange={handleChange}>
-                                <option value=""> Select an entite </option>
-                                {entites?.map((item: any) =>
-                                    <option value={item.nom_entite} key={item.id_entite}>{item.nom_entite}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="col-2 p-1">
-                        <div className="p-2">
-                            <label htmlFor="">Texte</label>
+                            <SelectContol
+                                label='Condiment'
+                                name='condiment'
+                                id='condiment'
+                                value={formValues?.condiment}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={condiments}
+                                option='nom_condiment'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                 </div>
@@ -157,38 +220,98 @@ const AdminAudit: React.FC = () => {
                 <div className="row mb-2">
                     <div className="col-2 p-1">
                         <div className="p-2">
-                            <label htmlFor="">Texte</label>
+                            <SelectContol
+                                label='Accompagnement'
+                                name='accompagnement'
+                                id='accompagnement'
+                                value={formValues?.accompagnement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={accompagnements}
+                                option='nom_accompagnement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
                         <div className="p-2">
-                            <label htmlFor="">Texte</label>
+                            <SelectContol
+                                label='Aliment'
+                                name='aliment'
+                                id='aliment'
+                                value={formValues?.aliment}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={aliments}
+                                option='nom_aliment'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
                         <div className="p-2">
-                            <label htmlFor="">Texte</label>
+                            <InputControl
+                                label="Prix"
+                                id='prix'
+                                value={formValues?.prix}
+                                type='number'
+                                name='prix'
+                                placeholder="e.g. 1000FC"
+                                handleChange={handleChange}
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-2 p-1">
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
                     <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
+                        <div className="p-2">
+                            <SelectContol
+                                label='Departement'
+                                name='departement'
+                                id='departement'
+                                value={formValues?.departement}
+                                onChange={handleChange}
+                                disabled={false}
+                                options={departements}
+                                option='nom_departement'
+                                defaultMessage='- Tout sélectionner -'
+                            />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
-                        <div className="border border-1 p-2">
-                            <label htmlFor="">Texte</label>
-                        </div>
-                    </div>
+
                 </div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between my-3">
                     <div>
-                        <button>Filter</button>
+                        <button onClick={handleSearch}>Filter</button>
                     </div>
                     <div>
                         <select name="" id="">
@@ -199,11 +322,7 @@ const AdminAudit: React.FC = () => {
                 </div>
             </Card>
 
-            {
-                isLoading ?
-                    <Loader /> :
-                    <CustomTable columns={tableColumns} data={filteredData} rowsPerPage={10} isLink={false} />
-            }
+            <CustomTable columns={tableColumns} data={displayData} rowsPerPage={10} error={isError} isLink={false} />
 
         </div>
     )

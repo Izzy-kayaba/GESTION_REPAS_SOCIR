@@ -13,7 +13,7 @@ import { useUserContext } from '../helpers/UserContext';
 
 const Routing: React.FC = () => {
 
-    const { userProfile } : any = useUserContext();
+    const { userProfile }: any = useUserContext();
     const isUserLoggedIn = userProfile !== undefined;
 
     return (

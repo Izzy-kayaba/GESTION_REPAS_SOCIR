@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "accompagnements",
+  "info": {
+    "singularName": "accompagnement",
+    "pluralName": "accompagnements",
+    "displayName": "Accompagnements"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_accompagnement": {
+      "type": "string"
+    }
+  }
+}

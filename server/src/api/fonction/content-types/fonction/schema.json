@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fonctions",
+  "info": {
+    "singularName": "fonction",
+    "pluralName": "fonctions",
+    "displayName": "Fonctions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_fonction": {
+      "type": "string"
+    }
+  }
+}

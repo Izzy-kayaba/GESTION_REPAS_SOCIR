@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "entites",
+  "info": {
+    "singularName": "entite",
+    "pluralName": "entites",
+    "displayName": "Entites"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom_entite": {
+      "type": "string"
+    }
+  }
+}
