@@ -104,8 +104,6 @@ const AgentsForm: React.FC = () => {
         }
     };
 
-    console.log(formData)
-
     return (
         <>
             <div className="d-flex justify-content-between px-2">
@@ -148,7 +146,6 @@ const AgentsForm: React.FC = () => {
                             </Form.Group>
                         </div>
                     </div>
-
                     <div className={`row ${style.row}`}>
                         <h5 className="fw-bold">COORDONNÉES PERSONNELLES</h5>
                         <div className="col-12 col-md-6">

@@ -46,7 +46,6 @@ const Sidebar: React.FC = () => {
                         <NavLink className={customClassName} to="/admin/configuration/profile">
                             Profile
                         </NavLink>
-
                     </> : null
                 }
             </ul>

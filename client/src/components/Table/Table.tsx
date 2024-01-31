@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import style from "./Table.module.css"
 import Loader from '../Loader/Loader';
+import { PrimaryButton } from '../Accessories/Accessories';
 
 // Define interfaces for table columns and props
 interface TableColumn {
@@ -110,33 +111,39 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, error, 
             </tr>
           </thead>
           <tbody>
-            {/* Map through current data and create tr elements */}
-            {currentData.map((row, rowIndex) => (
-              <tr key={rowIndex} role='button'>
-                {columns.map((column, colIndex) => (
-                  <td key={colIndex} style={tdStyle}>
-                    {/* This is navigating to the first property of the object */}
-                    <Link to={isLink ? `./${Object.values(row)[0]}` : `./`}
-                      className="nav-link">
-                      {row[column.dataKey]}
-                    </Link>
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {currentData.length > 0 ? (
+              // Map through current data and create tr elements
+              currentData.map((row, rowIndex) => (
+                <tr key={rowIndex} role='button'>
+                  {columns.map((column, colIndex) => (
+                    <td key={colIndex} style={tdStyle}>
+                      {/* This is navigating to the first property of the object */}
+                      <Link
+                        to={isLink ? `./${Object.values(row)[0]}` : `./`}
+                        className="nav-link"
+                      >
+                        {row[column.dataKey]}
+                      </Link>
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) :
+              <tr className='text-center'>
+                <td colSpan={columns.length}>Pas d'info</td>
+              </tr>}
           </tbody>
         </Table>
-
       }
       {/* Pagination buttons */}
       <div className="d-flex justify-content-between align-items-center">
-        <Button onClick={handlePreviousPage} disabled={currentPage === 1} variant="secondary" style={tdStyle}>
+        <PrimaryButton onClick={handlePreviousPage} disabled={currentPage === 1}>
           Précédent
-        </Button>
+        </PrimaryButton>
         <span>{`Page ${currentPage} sur ${totalPages}`}</span>
-        <Button onClick={handleNextPage} disabled={currentPage === totalPages} style={tdStyle}>
+        <PrimaryButton onClick={handleNextPage} disabled={currentPage === totalPages || data.length === 0}>
           Suivant
-        </Button>
+        </PrimaryButton>
       </div>
     </div>
   );

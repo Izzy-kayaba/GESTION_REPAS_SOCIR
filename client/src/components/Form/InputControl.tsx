@@ -7,7 +7,7 @@ interface InputProps {
     id: string,
     name: string,
     value: string,
-    placeholder: string
+    placeholder?: string
     handleChange: (e: any) => void
 }
 

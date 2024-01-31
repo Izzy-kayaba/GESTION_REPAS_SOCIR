@@ -5,6 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import InputControl from '../../components/Form/InputControl';
 import Loader from '../../components/Loader/Loader';
 import SelectContol from '../../components/Form/SelectControl';
+import { PrimaryButton } from '../../components/Accessories/Accessories';
 
 const AdminAudit: React.FC = () => {
 
@@ -18,8 +19,9 @@ const AdminAudit: React.FC = () => {
         accompagnement: number;
         aliment: number;
         prix: number;
+        startingDate: Date;
+        closingDate: Date;
     }
-
 
     const tableColumns = [
         { title: 'Matricule', dataKey: 'matr_agent' },
@@ -44,7 +46,9 @@ const AdminAudit: React.FC = () => {
         condiment: "",
         accompagnement: "",
         aliment: "",
-        prix: ""
+        prix: "",
+        startingDate:"",
+        closingDate:""
     }
 
     // Utiliser l'état pour gérer les données lisibles par les utilisateurs
@@ -92,6 +96,7 @@ const AdminAudit: React.FC = () => {
     }, [data]);
 
     const handleSearch = async () => {
+
         try {
             const response = await fetch(`${process.env.REACT_APP_DEV_MODE}/api/repas-agents?populate[id_agent][populate]=*&filters[id_agent][nom_agent][$startsWithi]=${formValues.agent}` +
                 `&filters[id_agent][id_tour][id][$containsi]=${formValues.tour}` +
@@ -100,7 +105,9 @@ const AdminAudit: React.FC = () => {
                 `&filters[id_agent][matr_agent][$startsWithi]=${formValues.matricule}` +
                 `&filters[id_agent][id_condiment][id][$containsi]=${formValues.condiment}` +
                 `&filters[id_agent][id_departement][id][$containsi]=${formValues.departement}` +
-                `&filters[id_agent][id_accompagnement][id][$containsi]=${formValues.accompagnement}`);
+                `&filters[id_agent][id_accompagnement][id][$containsi]=${formValues.accompagnement}` );
+                // `&filters[$and][0][createdAt][$gte]=${formValues?.startingDate}` +
+                // `&filters[$and][1][createdAt][$lte]=${formValues?.closingDate}`
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -121,12 +128,14 @@ const AdminAudit: React.FC = () => {
         }));
     };
 
+    console.log(formValues)
+
     return (
         <div className="m-1" >
             <Card className="px-2 mb-5">
                 <div className="row mb-2">
-                    <div className="col-2 p-1">
-                        <div className=" p-2">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
+                        <div className="p-2">
                             <InputControl
                                 label="Matricule"
                                 id='matricule'
@@ -138,8 +147,7 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className=" p-2">
                             <InputControl
                                 label="Agent"
@@ -153,7 +161,7 @@ const AdminAudit: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Entite'
@@ -168,8 +176,7 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Departement'
@@ -184,7 +191,7 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Tour'
@@ -200,7 +207,7 @@ const AdminAudit: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Condiment'
@@ -218,7 +225,7 @@ const AdminAudit: React.FC = () => {
                 </div>
 
                 <div className="row mb-2">
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Accompagnement'
@@ -233,7 +240,7 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Aliment'
@@ -248,7 +255,7 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <InputControl
                                 label="Prix"
@@ -261,7 +268,7 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
                             <SelectContol
                                 label='Departement'
@@ -276,42 +283,34 @@ const AdminAudit: React.FC = () => {
                             />
                         </div>
                     </div>
-
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
-                            <SelectContol
-                                label='Departement'
-                                name='departement'
-                                id='departement'
-                                value={formValues?.departement}
-                                onChange={handleChange}
-                                disabled={false}
-                                options={departements}
-                                option='nom_departement'
-                                defaultMessage='- Tout sélectionner -'
+                        <InputControl
+                                label="Commencant"
+                                id='startingDate'
+                                value={formValues?.startingDate}
+                                type='date'
+                                name='startingDate'
+                                handleChange={handleChange}
                             />
                         </div>
                     </div>
-                    <div className="col-2 p-1">
+                    <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
-                            <SelectContol
-                                label='Departement'
-                                name='departement'
-                                id='departement'
-                                value={formValues?.departement}
-                                onChange={handleChange}
-                                disabled={false}
-                                options={departements}
-                                option='nom_departement'
-                                defaultMessage='- Tout sélectionner -'
+                        <InputControl
+                                label="Terminant"
+                                id='closingDate'
+                                value={formValues?.closingDate}
+                                type='date'
+                                name='closingDate'
+                                handleChange={handleChange}
                             />
                         </div>
                     </div>
-
                 </div>
                 <div className="d-flex justify-content-between my-3">
                     <div>
-                        <button onClick={handleSearch}>Filter</button>
+                    <PrimaryButton variant="contained" onClick={handleSearch}>Filtrer</PrimaryButton>
                     </div>
                     <div>
                         <select name="" id="">
@@ -321,9 +320,7 @@ const AdminAudit: React.FC = () => {
                     </div>
                 </div>
             </Card>
-
-            <CustomTable columns={tableColumns} data={displayData} rowsPerPage={10} error={isError} isLink={false} />
-
+            <CustomTable columns={tableColumns} data={displayData} rowsPerPage={2} error={isError} isLink={false} />
         </div>
     )
 }
