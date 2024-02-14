@@ -18,9 +18,9 @@ const Routing: React.FC = () => {
 
     return (
         <Routes>
-            <Route path="/" element={isUserLoggedIn ? <Navigate to="/admin" /> : <Navigate to="/login" />} />
+            <Route path="/" element={!isUserLoggedIn ? <Navigate to="/admin" /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin/*" element={isUserLoggedIn ? <AdminRoutes /> : <Navigate to="/login" />} />
+            <Route path="/admin/*" element={!isUserLoggedIn ? <AdminRoutes /> : <Navigate to="/login" />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

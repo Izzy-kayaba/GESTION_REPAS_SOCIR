@@ -1,6 +1,16 @@
 import React from 'react'
+import LineChart from '../../components/LineChart/LineChart';
 
 const AdminDashboard = () => {
+
+  const data = [
+    { year: 2016, userGain: 100 },
+    { year: 2017, userGain: 150 },
+    { year: 2018, userGain: 200 },
+    { year: 2019, userGain: 180 },
+    { year: 2020, userGain: 250 },
+  ];
+
   return (
     <main>
       <div className="container-fluid">
@@ -37,6 +47,12 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="container" >
+        <div>
+          <LineChart data={data} />
         </div>
       </div>
     </main >
