@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, FormControl } from 'react-bootstrap';
-import ModalTemplate from '../../components/Modal/Modal';
 import Loader from '../../components/Loader/Loader';
 import useFetch from '../../hooks/useFetch';
 import CustomTable from '../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
-import useTable from '../../hooks/useTable';
+import { Formik } from "formik";
 
 type Agent = {
   id_agent?: number;
@@ -92,15 +90,28 @@ const Agents: React.FC = () => {
 
       <div className="p-2">
         {/* Formulaire de recherche */}
-        <Form>
-          <FormControl
-            type="text"
-            placeholder="Rechercher agent par nom"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </Form>
-      </div>
+
+        <Formik
+          initialValues={{ name: 'jared' }}
+          onSubmit={(values, actions) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              actions.setSubmitting(false);
+            }, 1000);
+          }}
+        >
+          {() => (
+            <form>
+              <input
+                type="text"
+                placeholder="Rechercher agent par nom"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </form>
+          )}
+        </Formik>
+      </div >
       {
         isLoading ?
           <Loader /> :

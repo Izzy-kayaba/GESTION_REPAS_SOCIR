@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import style from "./Sidebar.module.css"
-import { Button, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { GiMeal } from "react-icons/gi";
 import { IoMdArrowDropdown } from "react-icons/io";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Alert } from 'react-bootstrap';
+import { Formik } from "formik"
 import female from "../../assets/female.jpg"
 import male from "../../assets/male.jpg"
 import style from "../../components/Form/Form.module.css";
@@ -107,241 +107,203 @@ const AgentsForm: React.FC = () => {
     return (
         <>
             <div className="d-flex justify-content-between px-2">
-                <Button className={style.bouton}>
+                <button className={style.bouton}>
                     Annuler
-                </Button>
+                </button>
 
                 <NavLink to={"../agents"} className="nav-link d-inline border border-1 rounded-2 p-2 ">
                     Voir tableau
                 </NavLink>
             </div>
             <FormTemplate>
-                <Form onSubmit={handleSubmit}>
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">MATRICULE ET PHOTO</h5>
-                        <div className='col-12 col-md-6'>
-                            <Form.Label>MATRICULE</Form.Label >
-                            <Form.Control
-                                type="text"
-                                name="matr_agent"
-                                value={formData?.matr_agent}
-                                onChange={handleChange}
-                                className={style.formControl}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                            </Form.Control.Feedback>
-                        </div>
-
-                        <div className='col-12 col-md-6'>
-                            <Form.Group controlId="image">
-                                <div className="d-flex justify-content-center px-5">
-                                    <img
-                                        src={formData?.sexe === "M" ? male : female}
-                                        alt={`image ${formData?.sexe}`}
-                                        className={style.avatar}
+                <Formik
+                    initialValues={{ name: 'jared' }}
+                    onSubmit={(values, actions) => {
+                        setTimeout(() => {
+                            alert(JSON.stringify(values, null, 2));
+                            actions.setSubmitting(false);
+                        }, 1000);
+                    }}
+                >
+                    {props => (
+                        <form onSubmit={props.handleSubmit}>
+                            <div className={`row ${style.row}`}>
+                                <h5 className="fw-bold">MATRICULE ET PHOTO</h5>
+                                <div className='col-12 col-md-6'>
+                                    <label>MATRICULE</label >
+                                    <input
+                                        type="text"
+                                        name="matr_agent"
+                                        value={formData?.matr_agent}
+                                        onChange={handleChange}
+                                        className={style.formControl}
                                     />
                                 </div>
-                                <Form.Control.Feedback type="invalid">
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                    </div>
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">COORDONNÉES PERSONNELLES</h5>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="nom_agent">
-                                <Form.Label>NOM</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="nom_agent"
-                                    value={formData?.nom_agent}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.nom_agent}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.nom_agent} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="postnom_agent">
-                                <Form.Label>POSTNOM</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="postnom_agent"
-                                    value={formData?.postnom_agent}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.postnom_agent}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.postnom_agent} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="prenom_agent">
-                                <Form.Label>PRENOM</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="prenom_agent"
-                                    value={formData?.prenom_agent}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.prenom_agent}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.prenom_agent */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Form.Label>GENRE</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="sexe"
-                                value={formData?.sexe}
-                                onChange={handleChange}
-                                // isInvalid={!!formErrors.sexe}
-                                className="my-0"
-                            >
-                                <option value="">Sélectionnez le sexe</option>
-                                <option value="M">Masculin</option>
-                                <option value="F">Féminin</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {/* {formErrors.sexe} */}
-                            </Form.Control.Feedback>
-                        </div>
-                    </div>
 
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">COORDONNÉES DE CONTACT</h5>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="contact">
-                                <Form.Label>NUMERO DE TEL.</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="contact"
-                                    value={formData?.contact}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.contact}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.contact} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="email_agent">
-                                <Form.Label>ADRESSE E-MAIL</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="email_agent"
-                                    value={formData?.email_agent}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.email_agent}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.email_agent} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                    </div>
+                                <div className='col-12 col-md-6'>
+                                    <div className="d-flex justify-content-center px-5">
+                                        <img
+                                            src={formData?.sexe === "M" ? male : female}
+                                            alt={`image ${formData?.sexe}`}
+                                            className={style.avatar}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={`row ${style.row}`}>
+                                <h5 className="fw-bold">COORDONNÉES PERSONNELLES</h5>
+                                <div className="col-12 col-md-6">
+                                    <label>NOM</label>
+                                    <input
+                                        type="text"
+                                        name="nom_agent"
+                                        value={formData?.nom_agent}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.nom_agent}
+                                        className="my-0"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <label>POSTNOM</label>
+                                    <input
+                                        type="text"
+                                        name="postnom_agent"
+                                        value={formData?.postnom_agent}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.postnom_agent}
+                                        className="my-0"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <label>PRENOM</label>
+                                    <input
+                                        type="text"
+                                        name="prenom_agent"
+                                        value={formData?.prenom_agent}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.prenom_agent}
+                                        className="my-0"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <label>GENRE</label>
+                                    <select
+                                        name="sexe"
+                                        value={formData?.sexe}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.sexe}
+                                        className="my-0"
+                                    >
+                                        <option value="">Sélectionnez le sexe</option>
+                                        <option value="M">Masculin</option>
+                                        <option value="F">Féminin</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">FONCTIONALITES</h5>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="id_fonction">
-                                <Form.Label>Fonction</Form.Label>
-                                <Form.Select aria-label="Default select example"
-                                    name="id_fonction"
-                                    defaultValue={formData?.id_fonction}
-                                    onChange={handleChange}>
-                                    <option >Open this select menu</option>
-                                    {fonctions?.data?.map((fonction: any, index: React.Key | null | undefined) =>
-                                    (
-                                        <option key={index}
-                                            value={parseInt(fonction?.id)}>
-                                            {fonction?.nom_fonction}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </Form.Group>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="email_agent">
-                                <Form.Label>ADRESSE E-MAIL</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="email_agent"
-                                    value={formData?.email_agent}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.email_agent}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.email_agent} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                    </div>
+                            <div className={`row ${style.row}`}>
+                                <h5 className="fw-bold">COORDONNÉES DE CONTACT</h5>
+                                <div className="col-12 col-md-6">
+                                    <label>NUMERO DE TEL.</label>
+                                    <input
+                                        type="text"
+                                        name="contact"
+                                        value={formData?.contact}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.contact}
+                                        className="my-0"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <label>ADRESSE E-MAIL</label>
+                                    <input
+                                        type="text"
+                                        name="email_agent"
+                                        value={formData?.email_agent}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.email_agent}
+                                        className="my-0"
+                                    />
+                                </div>
+                            </div>
 
-                    <div className={`row ${style.row}`}>
-                        <h5 className="fw-bold">INFORMATIONS DE NAISSANCE ET DE RÉSIDENCE</h5>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="lieu_naiss">
-                                <Form.Label>LIEU DE NAISSANCE</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="lieu_naiss"
-                                    value={formData?.lieu_naiss}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.lieu_naiss}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.lieu_naiss} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Form.Group controlId="date_naiss">
-                                <Form.Label>DATE DE NAISSANCE</Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    name="date_naiss"
-                                    value={formData?.date_naiss?.slice(0, 10)}
-                                    onChange={handleChange}
-                                    // isInvalid={!!formErrors.date_naiss}
-                                    className="my-0"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {/* {formErrors.date_naiss} */}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                    </div>
+                            <div className={`row ${style.row}`}>
+                                <h5 className="fw-bold">FONCTIONALITES</h5>
+                                <div className="col-12 col-md-6">
 
-                    {/* Display errors at the top of the form */}
-                    {/* {Object.keys(formErrors).length > 0 && (
+                                    <label>Fonction</label>
+                                    <select aria-label="Default select example"
+                                        name="id_fonction"
+                                        defaultValue={formData?.id_fonction}
+                                        onChange={handleChange}>
+                                        <option >Open this select menu</option>
+                                        {fonctions?.data?.map((fonction: any, index: React.Key | null | undefined) =>
+                                        (
+                                            <option key={index}
+                                                value={parseInt(fonction?.id)}>
+                                                {fonction?.nom_fonction}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <label>ADRESSE E-MAIL</label>
+                                    <input
+                                        type="text"
+                                        name="email_agent"
+                                        value={formData?.email_agent}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.email_agent}
+                                        className="my-0"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={`row ${style.row}`}>
+                                <h5 className="fw-bold">INFORMATIONS DE NAISSANCE ET DE RÉSIDENCE</h5>
+                                <div className="col-12 col-md-6">
+                                    <label>LIEU DE NAISSANCE</label>
+                                    <input
+                                        type="text"
+                                        name="lieu_naiss"
+                                        value={formData?.lieu_naiss}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.lieu_naiss}
+                                        className="my-0"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <label>DATE DE NAISSANCE</label>
+                                    <input
+                                        type="date"
+                                        name="date_naiss"
+                                        value={formData?.date_naiss?.slice(0, 10)}
+                                        onChange={handleChange}
+                                        // isInvalid={!!formErrors.date_naiss}
+                                        className="my-0"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Display errors at the top of the form */}
+                            {/* {Object.keys(formErrors).length > 0 && (
                         <Alert variant="danger" className="mt-3">
                             Il y a des erreurs dans le formulaire. Veuillez les corriger.
                         </Alert>
                     )} */
-                    }
+                            }
 
-                    <div className="text-center">
-                        {/* Submit Button */}
-                        <Button variant="primary" type="submit">
-                            {id ? <> Modifier</> : <>Ajouter</>}
-                        </Button>
-                    </div>
-                </Form>
-            </FormTemplate>
+                            <div className="text-center">
+                                {/* Submit Button */}
+                                <button>
+                                    {id ? <> Modifier</> : <>Ajouter</>}
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                </Formik>
+            </FormTemplate >
         </>
 
     )

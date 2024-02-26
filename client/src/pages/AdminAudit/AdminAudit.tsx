@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import CustomTable from "../../components/Table/Table";
-import { Card } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
 import InputControl from '../../components/Form/InputControl';
 import Loader from '../../components/Loader/Loader';
 import SelectContol from '../../components/Form/SelectControl';
-import { PrimaryButton } from '../../components/Accessories/Accessories';
+import { Button } from '../../components/Accessories/Button';
 
 const AdminAudit: React.FC = () => {
 
@@ -47,8 +46,8 @@ const AdminAudit: React.FC = () => {
         accompagnement: "",
         aliment: "",
         prix: "",
-        startingDate:"",
-        closingDate:""
+        startingDate: "",
+        closingDate: ""
     }
 
     // Utiliser l'état pour gérer les données lisibles par les utilisateurs
@@ -105,9 +104,9 @@ const AdminAudit: React.FC = () => {
                 `&filters[id_agent][matr_agent][$startsWithi]=${formValues.matricule}` +
                 `&filters[id_agent][id_condiment][id][$containsi]=${formValues.condiment}` +
                 `&filters[id_agent][id_departement][id][$containsi]=${formValues.departement}` +
-                `&filters[id_agent][id_accompagnement][id][$containsi]=${formValues.accompagnement}` );
-                // `&filters[$and][0][createdAt][$gte]=${formValues?.startingDate}` +
-                // `&filters[$and][1][createdAt][$lte]=${formValues?.closingDate}`
+                `&filters[id_agent][id_accompagnement][id][$containsi]=${formValues.accompagnement}`);
+            // `&filters[$and][0][createdAt][$gte]=${formValues?.startingDate}` +
+            // `&filters[$and][1][createdAt][$lte]=${formValues?.closingDate}`
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -132,7 +131,7 @@ const AdminAudit: React.FC = () => {
 
     return (
         <div className="m-1" >
-            <Card className="px-2 mb-5">
+            <div className="card px-2 mb-5">
                 <div className="row mb-2">
                     <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
@@ -285,7 +284,7 @@ const AdminAudit: React.FC = () => {
                     </div>
                     <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
-                        <InputControl
+                            <InputControl
                                 label="Commencant"
                                 id='startingDate'
                                 value={formValues?.startingDate}
@@ -297,7 +296,7 @@ const AdminAudit: React.FC = () => {
                     </div>
                     <div className="col-6 col-sm-4 col-xl-2 p-1">
                         <div className="p-2">
-                        <InputControl
+                            <InputControl
                                 label="Terminant"
                                 id='closingDate'
                                 value={formValues?.closingDate}
@@ -310,7 +309,9 @@ const AdminAudit: React.FC = () => {
                 </div>
                 <div className="d-flex justify-content-between my-3">
                     <div>
-                    <PrimaryButton variant="contained" onClick={handleSearch}>Filtrer</PrimaryButton>
+                        <Button onClick={handleSearch}>
+                            Testing
+                        </Button>
                     </div>
                     <div>
                         <select name="" id="">
@@ -319,7 +320,7 @@ const AdminAudit: React.FC = () => {
                         </select>
                     </div>
                 </div>
-            </Card>
+            </div>
             <CustomTable columns={tableColumns} data={displayData} rowsPerPage={2} error={isError} isLink={false} />
         </div>
     )

@@ -7,6 +7,12 @@ type ButtonProps = {
   disabled?: boolean,
   children: React.ReactNode
 }
+/**
+ * 
+ * @param param0
+ * @returns 
+ */
+
 
 const Button: React.FC<ButtonProps> = ({
   size = 'medium',

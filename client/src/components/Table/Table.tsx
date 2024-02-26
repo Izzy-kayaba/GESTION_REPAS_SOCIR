@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import style from "./Table.module.css"
 import Loader from '../Loader/Loader';
-import { PrimaryButton } from '../Accessories/Accessories';
+import {Button} from '../Accessories/Button';
 
 // Define interfaces for table columns and props
 interface TableColumn {
@@ -91,12 +90,10 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, error, 
   return (
     <div className="mt-4">
       {/* React Bootstrap Table component */}
-
-
       {error ?
         <div className='mb-3'>
           <Loader />
-        </div> : <Table bordered hover responsive>
+        </div> : <table className="table table-striped table-hover">
           <thead>
             <tr>
               {/* Map through columns and create th elements */}
@@ -133,17 +130,17 @@ const CustomTable: React.FC<TableProps> = ({ columns, data, rowsPerPage, error, 
                 <td colSpan={columns.length}>Pas d'info</td>
               </tr>}
           </tbody>
-        </Table>
+        </table>
       }
       {/* Pagination buttons */}
       <div className="d-flex justify-content-between align-items-center">
-        <PrimaryButton onClick={handlePreviousPage} disabled={currentPage === 1}>
+        <Button onClick={handlePreviousPage} isDisabled={currentPage === 1}>
           Précédent
-        </PrimaryButton>
+        </Button>
         <span>{`Page ${currentPage} sur ${totalPages}`}</span>
-        <PrimaryButton onClick={handleNextPage} disabled={currentPage === totalPages || data.length === 0}>
+        <Button onClick={handleNextPage} isDisabled={currentPage === totalPages || data.length === 0}>
           Suivant
-        </PrimaryButton>
+        </Button>
       </div>
     </div>
   );
