@@ -7,16 +7,19 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 
 const Sidebar: React.FC = () => {
+    
     const customClassName = ({ isActive }: { isActive: boolean }) =>
         isActive ? `${style.link_nav} ${style.active}` : `${style.link_nav}`;
+
     const [showParams, setShowParams] =useState<Boolean>(false);
+
     const handleDrowpDown = () => {
         setShowParams(!showParams);
     }
 
     return (
         <nav id="sidebar" className={style.nav}>
-            <h2 className={style.title_menu}>Administration</h2>
+            <h2 className={style.titre_menu}>Administration</h2>
             <ul className={style.ul}>
                 <NavLink className={customClassName} to="/admin">
                     TABLEAU DE BORD
