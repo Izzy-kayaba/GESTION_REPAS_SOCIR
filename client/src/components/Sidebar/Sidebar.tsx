@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
                     Audit
                 </NavLink>
 
-                <a onClick={handleDrowpDown} className={style.btn_param} >
+                <a onClick={handleDrowpDown} className={style.btn_param} role="button" >
                     CONFIGURATION {showParams ? <IoMdArrowDropdown /> : <IoMdArrowDropup />}
                 </a>
                 {

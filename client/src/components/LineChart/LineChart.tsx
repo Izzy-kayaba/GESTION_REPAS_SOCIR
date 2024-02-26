@@ -39,6 +39,8 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       <Line
         data={chartData}
         options={{
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             title: {
               text: "Monthly revenue"

@@ -1,5 +1,6 @@
 import React from 'react'
 import LineChart from '../../components/LineChart/LineChart';
+import Card from "../../components/Card/Card";
 
 const AdminDashboard = () => {
 
@@ -24,12 +25,10 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="col-lg-3 col-md-6 mb-2">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Card 2</h5>
-                <p className="card-text">Another sample card content.</p>
-              </div>
-            </div>
+            <Card
+              title="Card 3"
+              text="More information goes here"
+            />
           </div>
           <div className="col-lg-3 col-md-6 mb-2">
             <div className="card">
@@ -51,7 +50,7 @@ const AdminDashboard = () => {
       </div>
 
       <div className="container" >
-        <div>
+        <div className="p-3" style={{ position: "relative", height: "40vh" }}>
           <LineChart data={data} />
         </div>
       </div>

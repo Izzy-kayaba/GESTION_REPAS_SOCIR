@@ -1,0 +1,8 @@
+.card {
+    box-shadow: -1px 1px 3px 0px rgba(9, 3, 71, 0.30);
+    transition: all 400ms;
+  }
+  
+  /* .card:hover {
+    box-shadow: -1px 1px 9px -0px rgba(9, 3, 71, 0.30);
+  } */
