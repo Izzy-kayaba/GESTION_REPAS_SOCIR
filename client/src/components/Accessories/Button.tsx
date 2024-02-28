@@ -1,6 +1,5 @@
 import React, { FC, ReactNode } from 'react'
 
-
 interface ButtonProps {
     size?: "medium",
     isDisabled?: boolean | undefined,
