@@ -4,7 +4,12 @@ import React from 'react'
 const AdminParticipants: React.FC = () => {
     return (
         <div>
-            Admin Participants
+            <input name="country" list="countries"/>
+            <datalist id="countries">
+                <option value="Angola"/>
+                <option value="China"/>
+                <option value="South Africa"/>
+            </datalist>
         </div>
     )
 }
